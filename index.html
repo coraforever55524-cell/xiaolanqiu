@@ -1536,9 +1536,19 @@ RENDER.doc = function () {
 
     '<div class="sec-h" style="margin-top:22px"><h2>关于这个工具</h2><span class="sub">说清楚边界</span></div>' +    '<div class="card">' +
     '<p>这是一个<b>单文件网页应用</b>：双击就能用，断网也能用，数据存在你这台设备的浏览器本地（localStorage），不会上传到任何服务器。</p>' +
-    '<p><b>这意味着：</b>换设备、换浏览器、清理浏览器数据，记录会丢。重要教案请定期用「打印」存成 PDF，球员名单可以手动备份。</p>' +
+    '<p><b>这意味着：</b>换设备、换浏览器、清理浏览器数据，记录会丢。用上面的「导出备份」定期存一份，换手机或误清缓存时可以恢复。</p>' +
     '<p><b>它还没有的：</b>多教练协作、云端同步、微信小程序端、账号登录、微信支付。这些需要后端和服务器，单文件网页做不到，需要另外搭。</p>' +
     '<p style="margin-top:10px"><b>打印教案：</b>在「备课」或首页点「打印」，浏览器会弹出打印窗口，选「另存为 PDF」就能存成一份可发给家长的教案。</p>' +
+    '</div>' +
+
+    '<div class="sec-h" style="margin-top:22px"><h2>数据备份</h2><span class="sub">换手机、误清缓存时用</span></div>' +
+    '<div class="card">' +
+      '<div class="seg-d" style="margin-bottom:10px">' + bkCounts(state) + '。导出后把文字存到微信收藏或网盘；换设备、误清浏览器缓存时，用「导入恢复」找回。</div>' +
+      '<div class="row" style="gap:8px;flex-wrap:wrap">' +
+        '<button class="btn btn-p btn-s" data-act="bk-export">导出备份</button>' +
+        '<button class="btn btn-g btn-s" data-act="bk-restore">导入恢复</button>' +
+      '</div>' +
+      (state.flags.backupAt ? '<div class="seg-d" style="margin-top:10px">上次导出：' + esc(state.flags.backupAt) + '</div>' : '') +
     '</div>' +
 
     '<div class="sec-h" style="margin-top:22px"><h2>数据重置</h2><span class="sub">谨慎操作</span></div>' +
@@ -1581,6 +1591,88 @@ function printPlan(plan) {
   if (!plan) { toast('没有可打印的教案'); return; }
   $('#view-plan-print').innerHTML = printable(plan);
   setTimeout(() => { window.print(); }, 80);
+}
+
+/* =====================================================================
+   数据备份：导出 / 导入
+   ===================================================================== */
+function bkCounts(d) {
+  d = d || {};
+  return '球员 ' + ((d.players || []).length) + ' 名 · 训练记录 ' + ((d.sessions || []).length) +
+    ' 条 · 教案 ' + ((d.plans || []).length) + ' 份 · 体测 ' + ((d.measures || []).length) +
+    ' 条 · 自建动作 ' + ((d.cust || []).length) + ' 个';
+}
+function bkJson() {
+  return JSON.stringify({
+    app: 'xiaolanqiu', v: 1, at: (new Date()).toISOString().slice(0, 16).replace('T', ' '),
+    data: {
+      plans: state.plans, sessions: state.sessions, players: state.players,
+      measures: state.measures, cust: state.cust, flags: state.flags, team: state.team
+    }
+  }, null, 1);
+}
+function bkParse(text) {
+  let o;
+  try { o = JSON.parse(String(text || '').trim()); } catch (e) { return {ok: false, msg: '这不是合法的 JSON，检查是否复制完整（结尾要有 }）'}; }
+  const d = (o && o.data) ? o.data : o;
+  if (!d || typeof d !== 'object') return {ok: false, msg: '内容不对：找不到数据部分'};
+  if (!Array.isArray(d.players) && !Array.isArray(d.sessions) && !Array.isArray(d.plans)) {
+    return {ok: false, msg: '内容里没有球员 / 训练记录 / 教案，可能贴错了文件'};
+  }
+  return {ok: true, data: d, msg: bkCounts(d)};
+}
+function bkApply(d) {
+  ['plans', 'sessions', 'players', 'measures', 'cust'].forEach((k) => {
+    state[k] = Array.isArray(d[k]) ? d[k] : [];
+  });
+  if (d.flags) state.flags = Object.assign({wheel: 0}, d.flags);
+  if (d.team) state.team = Object.assign({red: 0, blue: 0}, d.team);
+  save();
+}
+function bkCopy(t, done) {
+  const fallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = t;
+    ta.style.position = 'fixed'; ta.style.left = '-9999px'; ta.style.top = '0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove();
+    if (ok) done(); else toast('复制失败：长按上面的文字，手动全选复制');
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t).then(() => done()).catch(fallback);
+  } else fallback();
+}
+function bkExportSheet() {
+  openSheet(
+    '<div class="sheet-h"><div><div class="seg-p">数据备份</div><div class="sheet-t">导出备份</div></div>' +
+      '<button class="close" data-act="close-sheet" aria-label="关闭">✕</button></div>' +
+    '<div class="note">这份文本包含全部数据：' + bkCounts(state) + '。存到微信收藏、备忘录或网盘；换手机、误清缓存时用「导入恢复」粘回去。</div>' +
+    '<div class="field"><label>备份文本</label><textarea name="bk" rows="8" readonly></textarea></div>' +
+    '<div class="row" style="gap:8px;margin-top:10px">' +
+      '<button class="btn btn-p btn-s" data-act="bk-copy">复制文本</button>' +
+      '<button class="btn btn-g btn-s" data-act="bk-dl">下载 .json</button>' +
+    '</div>' +
+    '<div class="note">复制或下载后会自动记下备份时间，说明页会显示「上次导出」。</div>'
+  );
+  const ta = $('#sheet textarea[name="bk"]');
+  if (ta) ta.value = bkJson();
+}
+function bkRestoreSheet() {
+  openSheet(
+    '<form data-act="bk-apply">' +
+      '<div class="sheet-h"><div><div class="seg-p">数据备份</div><div class="sheet-t">导入恢复</div></div>' +
+        '<button class="close" type="button" data-act="close-sheet" aria-label="关闭">✕</button></div>' +
+      '<div class="note warn">导入会<b>覆盖</b>这台设备现有的球员、训练记录、教案和体测。确认这份备份是最新的一份，再点下面的按钮。</div>' +
+      '<div class="field"><label>粘贴备份文本（整段 JSON）</label><textarea name="bk" rows="8" placeholder="把导出的那段文字整段粘贴到这里"></textarea></div>' +
+      '<div style="margin-top:12px"><button class="btn btn-p btn-block" type="submit">导入并覆盖</button></div>' +
+    '</form>'
+  );
+}
+function bkStamp() {
+  state.flags.backupAt = iso(new Date()) + ' ' + pad(new Date().getHours()) + ':' + pad(new Date().getMinutes());
+  save();
 }
 
 /* =====================================================================
@@ -1802,6 +1894,33 @@ function handle(act, arg, el, fd) {
     case 'del-session': {
       if (!confirm('删除这条训练记录？')) return;
       state.sessions = state.sessions.filter((s) => s.id !== arg); save(); render(); break;
+    }
+    case 'bk-export': bkExportSheet(); break;
+    case 'bk-restore': bkRestoreSheet(); break;
+    case 'bk-copy':
+      bkCopy(bkJson(), () => { bkStamp(); toast('备份文本已复制，去微信收藏或备忘录粘贴保存'); });
+      break;
+    case 'bk-dl': {
+      try {
+        const blob = new Blob([bkJson()], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '小篮球备份-' + TODAY + '.json';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => { URL.revokeObjectURL(url); }, 3000);
+        bkStamp();
+        toast('已导出备份文件，存到「文件」或网盘里');
+      } catch (e) { toast('这台浏览器不支持直接下载，请用「复制文本」'); }
+      break;
+    }
+    case 'bk-apply': {
+      const r = bkParse(String(fd.get('bk') || ''));
+      if (!r.ok) { toast(r.msg); break; }
+      if (!confirm('导入会覆盖现有数据。备份内容：' + r.msg + '。确定继续？')) break;
+      bkApply(r.data);
+      closeSheet(); render(); toast('已恢复：' + r.msg);
+      break;
     }
     case 'reset-all': {
       if (!confirm('清空全部数据？教案、记录、球员都会删除，无法恢复。')) return;
