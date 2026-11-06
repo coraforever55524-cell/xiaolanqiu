@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>小篮球训练台 · 6-15 岁青少年篮球训练工作台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230E1210'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23E4551D'/%3E%3Cpath d='M7 16h18M16 7v18M9.5 9.5q6.5 6.5 13 0M9.5 22.5q6.5-6.5 13 0' stroke='%230E1210' stroke-width='1.6' fill='none'/%3E%3C/svg%3E" />
+<style>
+/* ============ 基础 ============ */
+:root{
+  --ink:#0E1210; --ink2:#141A16; --card:#181F1A; --card2:#1E2620;
+  --line:#2B342D; --line2:#3A453C;
+  --paper:#F3EEE4; --muted:#96A297; --dim:#6B776E;
+  --ball:#E4551D; --ball2:#F07A3F; --balldim:#4A2412;
+  --teal:#2E8B74; --sand:#D8C9A3;
+  --r:14px;
+  --pad:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ink); color:var(--paper);
+  font-family:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  font-size:15px; line-height:1.55; letter-spacing:.01em;
+  padding-bottom:calc(74px + env(safe-area-inset-bottom));
+  overflow-x:hidden;
+}
+img,svg{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit;background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;font-size:16px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--ball);outline-offset:1px}
+::selection{background:var(--ball);color:#120a05}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.wrap{max-width:1080px;margin:0 auto;padding:0 var(--pad)}
+
+/* ============ 顶栏 ============ */
+.top{
+  position:sticky;top:0;z-index:40;
+  background:linear-gradient(180deg, var(--ink) 62%, rgba(14,18,16,0));
+  padding:14px 0 10px;
+}
+.top-in{display:flex;align-items:center;gap:12px;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:var(--ball);position:relative;overflow:hidden}
+.brand-mark::before,.brand-mark::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+}
+.brand-mark::before{border:2px solid var(--ink);opacity:.9;transform:scale(.94)}
+.brand-mark::after{background:
+  linear-gradient(var(--ink),var(--ink)) 50% 0/2px 100% no-repeat,
+  linear-gradient(var(--ink),var(--ink)) 0 50%/100% 2px no-repeat;
+  opacity:.9}
+.brand-txt{min-width:0}
+.brand-txt b{display:block;font-size:19px;line-height:1.1;letter-spacing:.06em}
+.brand-txt span{display:block;font-size:11px;color:var(--muted);letter-spacing:.14em;margin-top:3px}
+.top-meta{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 11px;border-radius:999px;
+  border:1px solid var(--line2);background:var(--ink2);font-size:12px;color:var(--muted);white-space:nowrap
+}
+.chip b{color:var(--paper);font-weight:600}
+.chip .dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+
+/* desktop nav */
+.nav-top{display:none}
+
+/* ============ 视图容器 ============ */
+.view{display:none;padding-top:6px}
+.view.on{display:block}
+.sec{margin:22px 0 0}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 10px}
+.sec-h h2{margin:0;font-size:16px;letter-spacing:.04em;font-weight:700}
+.sec-h .sub{font-size:12px;color:var(--dim)}
+
+/* ============ 卡片 ============ */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.card.flat{background:transparent}
+.row{display:flex;align-items:center;gap:10px}
+.row.between{justify-content:space-between}
+.grid{display:grid;gap:10px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+/* hero：战术板 */
+.hero{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line2);background:#121714;margin-top:4px}
+.hero-court{position:absolute;inset:0;opacity:.9}
+.hero-body{position:relative;padding:16px 16px 14px;display:flex;flex-direction:column;gap:12px;min-height:196px}
+.hero-k{font-size:11px;letter-spacing:.22em;color:var(--muted)}
+.hero-t{font-size:27px;line-height:1.18;font-weight:800;letter-spacing:.01em;margin:0;text-shadow:0 2px 18px rgba(0,0,0,.6)}
+.hero-t em{font-style:normal;color:var(--ball2)}
+.hero-sub{font-size:13px;color:#C9D2C9;max-width:34ch;margin:0}
+.hero-foot{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}
+
+/* 磁贴 */
+.magnet{display:inline-flex;align-items:center;gap:7px;background:rgba(14,18,16,.72);border:1px solid var(--line2);border-radius:10px;padding:7px 10px;font-size:12px;backdrop-filter:blur(2px)}
+.magnet i{width:7px;height:7px;border-radius:2px;background:var(--ball)}
+
+/* 按钮 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border-radius:12px;font-weight:600;font-size:15px;border:1px solid transparent;transition:transform .12s ease, background .2s}
+.btn:active{transform:translateY(1px)}
+.btn-p{background:var(--ball);color:#170A04}
+.btn-p:hover{background:var(--ball2)}
+.btn-g{background:var(--ink2);border-color:var(--line2);color:var(--paper)}
+.btn-g:hover{border-color:var(--ball)}
+.btn-s{min-height:38px;padding:0 13px;font-size:13px;border-radius:10px}
+.btn-block{width:100%}
+
+/* 列表 / 训练卡 */
+.list{display:grid;gap:10px}
+.drill{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 12px;width:100%;text-align:left;transition:border-color .15s,background .15s}
+.drill:hover{border-color:var(--balldim);background:var(--card2)}
+.drill-idx{width:44px;height:44px;border-radius:9px;display:grid;place-items:center;background:var(--balldim);color:var(--ball2);font-weight:700;font-size:13px;letter-spacing:.02em}
+.drill-n{font-weight:600;font-size:14.5px;line-height:1.3}
+.drill-m{font-size:11.5px;color:var(--muted);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap}
+.drill-m span{white-space:nowrap}
+.tag{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:999px;border:1px solid var(--line2);color:var(--muted);letter-spacing:.04em}
+.tag.a{color:var(--sand);border-color:#4a4230}
+.tag.b{color:#8FC7B4;border-color:#22453a}
+.tag.c{color:#E8B08F;border-color:#4d3225}
+
+/* 空态 */
+.empty{border:1px dashed var(--line2);border-radius:12px;padding:18px;text-align:center;color:var(--muted);font-size:13px}
+
+/* 课表 */
+.seg{display:grid;grid-template-columns:8px minmax(0,1fr) auto;gap:12px;align-items:start;padding:11px 12px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.seg-bar{width:8px;align-self:stretch;border-radius:3px;background:var(--ball);opacity:.7}
+.seg-p{font-size:10.5px;letter-spacing:.16em;color:var(--dim)}
+.seg-n{font-weight:600;font-size:14.5px;margin-top:2px}
+.seg-d{font-size:12px;color:var(--muted);margin-top:4px}
+.seg-t{font-size:20px;font-weight:800;color:var(--ball2);white-space:nowrap}
+.seg-t small{font-size:10px;color:var(--dim);font-weight:500;margin-left:2px}
+
+/* 计时器 */
+.timer-wrap{position:sticky;top:64px;z-index:20}
+.timer{background:#121714;border:1px solid var(--line2);border-radius:16px;padding:14px}
+.timer-n{font-size:11px;letter-spacing:.18em;color:var(--muted)}
+.timer-v{font-size:56px;font-weight:800;letter-spacing:.02em;line-height:1;margin:6px 0 2px;color:var(--ball2)}
+.timer-v.low{color:#FF6B4A}
+.timer-t{font-size:13px;color:var(--muted)}
+.progress{height:5px;border-radius:3px;background:var(--line);overflow:hidden;margin:10px 0 0}
+.progress i{display:block;height:100%;background:var(--ball);width:0;transition:width .3s linear}
+
+/* 表格 */
+.tbl{width:100%;table-layout:fixed;border-collapse:collapse;font-size:13px}
+.tbl th,.tbl td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tbl th{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.06em}
+
+/* 底部 tabbar */
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:rgba(14,18,16,.96);border-top:1px solid var(--line2);
+  backdrop-filter:blur(10px);
+  padding:6px 6px calc(6px + env(safe-area-inset-bottom));
+}
+.tabbar-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 6px;border-radius:10px;color:var(--dim);font-size:11px;letter-spacing:.02em}
+.tab.on{color:var(--paper);background:var(--ink2)}
+.tab.on svg{color:var(--ball)}
+.tab svg{width:21px;height:21px}
+
+/* 弹层 */
+.sheet-bg{position:fixed;inset:0;z-index:80;background:rgba(6,9,7,.72);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .18s}
+.sheet-bg.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:81;max-height:86vh;overflow:auto;background:var(--card);border-top:1px solid var(--line2);border-radius:18px 18px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));transform:translateY(102%);transition:transform .24s cubic-bezier(.2,.8,.2,1),opacity .2s;opacity:0;visibility:hidden;pointer-events:none}
+.sheet.on{transform:translateY(0);opacity:1;visibility:visible;pointer-events:auto}
+.sheet-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+.sheet-t{font-size:18px;font-weight:800;line-height:1.25}
+.close{width:38px;height:38px;border-radius:10px;border:1px solid var(--line2);display:grid;place-items:center;flex:0 0 38px}
+.kv{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px 10px;font-size:13px;margin:10px 0 0}
+.kv dt{color:var(--dim);font-size:11.5px;letter-spacing:.06em}
+.kv dd{margin:0}
+.blk{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line)}
+.blk h4{margin:0 0 7px;font-size:12px;letter-spacing:.14em;color:var(--muted);font-weight:600}
+.blk ul{margin:0;padding-left:17px}
+.blk li{margin:4px 0;font-size:13.5px;line-height:1.5}
+.note{border-left:2px solid var(--ball);padding:2px 0 2px 10px;font-size:12.5px;color:#D8C9A3;line-height:1.55}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom));transform:translate(-50%,10px);z-index:90;background:var(--paper);color:#12100C;padding:10px 16px;border-radius:10px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:88vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* 转盘 */
+.wheel-w{position:relative;width:min(78vw,320px);margin:6px auto 0;aspect-ratio:1/1}
+.wheel{width:100%;height:100%;transition:transform 2.6s cubic-bezier(.16,.7,.16,1)}
+.needle{position:absolute;left:50%;top:-8px;transform:translateX(-50%);width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-top:14px solid var(--ball);filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+
+/* 计分板 */
+.score{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.score-b{border:1px solid var(--line2);border-radius:14px;padding:12px;text-align:center;background:#121714}
+.score-b.red{border-color:#5A2B22;background:#1C1210}
+.score-b.blue{border-color:#1F3A46;background:#0F1619}
+.score-v{font-size:44px;font-weight:800;line-height:1;margin:4px 0 8px}
+.score-b.red .score-v{color:#F07A3F}
+.score-b.blue .score-v{color:#6FB6C9}
+.score-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.score-btns button{height:40px;border-radius:9px;border:1px solid var(--line2);font-weight:700;font-size:13px;background:var(--ink2)}
+
+/* 徽章 */
+.badges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.badge{border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center;background:var(--card);opacity:.42}
+.badge.on{opacity:1;border-color:var(--balldim);background:#1B140F}
+.badge svg{width:26px;height:26px;margin:0 auto 6px;color:var(--ball2)}
+.badge.on svg{color:var(--ball)}
+.badge b{display:block;font-size:12px;font-weight:600}
+.badge span{display:block;font-size:10.5px;color:var(--dim);margin-top:2px}
+
+/* 图表 */
+.chart{width:100%;height:132px}
+.bars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;align-items:end;height:112px;margin-top:6px}
+.bars .b{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;height:100%}
+.bars .v{width:100%;background:var(--ball);border-radius:5px 5px 0 0;min-height:3px;opacity:.85}
+.bars .v.zero{background:var(--line2);opacity:.6}
+.bars .l{font-size:10.5px;color:var(--dim)}
+
+/* 表单行 */
+.field{display:grid;gap:5px;margin:10px 0}
+.field label{font-size:11.5px;letter-spacing:.08em;color:var(--muted)}
+.field select,.field input,.field textarea{width:100%}
+
+/* 说明页 */
+.doc h3{font-size:15px;margin:20px 0 8px}
+.doc p,.doc li{font-size:13.5px;color:#CDD6CD;line-height:1.7}
+.doc code{background:var(--ink2);border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12.5px}
+.rule{height:1px;background:var(--line);margin:16px 0}
+
+/* 窄屏顶栏 */
+@media (max-width:767px){
+  .brand-txt span{display:none}
+  #topMeta .chip:nth-child(2){display:none}
+  .brand-txt b{font-size:18px}
+  .hero-t{font-size:26px}
+  .grid.g3{grid-template-columns:minmax(0,1fr)}
+  .hero-body{min-height:0}
+}
+
+/* 桌面端 */
+@media (min-width:768px){
+  body{padding-bottom:24px;font-size:15.5px}
+  .top{padding:18px 0 12px;background:var(--ink);border-bottom:1px solid var(--line)}
+  .top-in{gap:20px}
+  .brand-txt b{font-size:22px}
+  .nav-top{display:flex;gap:4px;flex:1;justify-content:center}
+  .nav-top a{font-size:13.5px;color:var(--muted);padding:8px 13px;border-radius:9px;text-decoration:none;letter-spacing:.03em}
+  .nav-top a.on{color:var(--ink);background:var(--paper);font-weight:600}
+  .nav-top a:hover:not(.on){color:var(--paper)}
+  .tabbar{display:none}
+  .hero-body{padding:24px;min-height:240px}
+  .hero-t{font-size:40px;max-width:20ch}
+  .hero-sub{font-size:14.5px}
+  .cols{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;align-items:start}
+  .cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+  .timer-v{font-size:72px}
+  .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .sheet{left:auto;right:24px;bottom:24px;width:460px;border-radius:16px;max-height:80vh;border:1px solid var(--line2)}
+  .badges{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .toast{bottom:32px}
+}
+@media (min-width:1024px){
+  .badges{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
+
+/* 打印：教案 */
+@media print{
+  body{background:#fff;color:#111;padding:0}
+  .top,.tabbar,.no-print,.hero-court{display:none!important}
+  .view:not(#view-plan-print){display:none!important}
+  #view-plan-print{display:block!important}
+  .card,.seg{background:#fff;border-color:#bbb;color:#111}
+  .seg-t{color:#a33}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0E1210">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="小篮球训练台">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+</head>
+<body>
+
+<!-- ===== 顶栏 ===== -->
+<header class="top">
+  <div class="wrap top-in">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-txt">
+        <b>小篮球训练台</b>
+        <span>6–15 岁 · 青少年篮球训练工作台</span>
+      </div>
+    </div>
+    <nav class="nav-top" id="navTop" aria-label="主导航"></nav>
+    <div class="top-meta" id="topMeta"></div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <section class="view" id="view-home"></section>
+  <section class="view" id="view-build"></section>
+  <section class="view" id="view-library"></section>
+  <section class="view" id="view-coach"></section>
+  <section class="view" id="view-squad"></section>
+  <section class="view" id="view-fun"></section>
+  <section class="view" id="view-stats"></section>
+  <section class="view" id="view-doc"></section>
+  <section class="view" id="view-plan-print"></section>
+</main>
+
+<div class="tabbar no-print"><div class="tabbar-in" id="tabbar"></div></div>
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   数据层：年龄段 / 分类 / 环节 / 训练库 / 趣味挑战 / 徽章
+   字段：id 编号 · n 名称 · cat 分类 · ages 适合年龄 · min 建议时长(分)
+        players 人数 · space 场地 · gear 器材 · goal 目标 · setup 组织
+        steps 做法 · points 教练要点 · up 进阶 · down 降阶 · fun 趣味化
+        phases 可放入的环节
+   ===================================================================== */
+const AGES = [
+  {id:'A', n:'U6–U8', t:'6–8 岁', ball:'3 号球 · 篮筐 2.35m', tip:'单次专注 4–6 分钟，靠游戏和比赛带动，不做长时间排队练习。'},
+  {id:'B', n:'U9–U11', t:'9–11 岁', ball:'4–5 号球 · 篮筐 2.60m', tip:'开始建立技术动作标准，每个动作先做对再做快。'},
+  {id:'C', n:'U12–U15', t:'12–15 岁', ball:'5–6 号球 · 篮筐 2.90–3.05m', tip:'加入对抗与战术基础，注意负荷控制，避免过早大重量力量训练。'}
+];
+const CATS = [
+  {id:'handle', n:'球感与运球'}, {id:'pass', n:'传接球'}, {id:'shoot', n:'投篮'},
+  {id:'foot', n:'脚步与防守'}, {id:'phys', n:'体能与对抗'}, {id:'game', n:'趣味游戏'}
+];
+const PHASES = [
+  {id:'warm', n:'热身激活'}, {id:'tech', n:'技术学习'}, {id:'game', n:'趣味挑战'},
+  {id:'match', n:'对抗应用'}, {id:'cool', n:'放松复盘'}
+];
+const THEMES = [
+  {id:'all', n:'综合'}, {id:'handle', n:'运球'}, {id:'pass', n:'传球'},
+  {id:'shoot', n:'投篮'}, {id:'foot', n:'防守'}, {id:'phys', n:'体能'}, {id:'game', n:'纯趣味'}
+];
+
+const DRILLS = [
+{id:'d01', n:'指尖拨球', cat:'handle', ages:['A'], min:6, players:'全体', space:'半场散开', gear:['球人手一个'],
+ goal:'建立手指触球的手感，掌心不贴球', setup:'每人一球，间隔一臂距离，教练站中间能看到所有人',
+ steps:['双手持球胸前，用指尖快速左右拨动，掌心空出','球绕头—腰—膝各一圈，换方向再来','把球向上抛 10 厘米，用手指连续快拍'],
+ points:['手指张开包住球，不要用手掌拍','眼睛尽量看前方，不看球','球不要高过腰，节奏比力量重要'],
+ up:'闭眼做 5 次绕身，再睁眼检查球有没有掉', down:'先做单手拨球，稳定后再双手', fun:'听谁的手指声音最响、最密，选一个“球感王”',
+ phases:['warm','tech']},
+
+{id:'d02', n:'原地高低运球', cat:'handle', ages:['A','B'], min:8, players:'全体', space:'半场散开', gear:['球人手一个'],
+ goal:'掌握低运球与高运球的区别与节奏', setup:'每人一球，一臂间距，教练口令切换',
+ steps:['低运球 20 秒：球不过膝，手在球上方','高运球 20 秒：球到腰腹，肩放松','高低交替，教练口令切换 4 轮'],
+ points:['用手指和手腕发力，不用整条手臂砸球','膝盖微屈，重心低','抬头看教练的手指数数'],
+ up:'加入左右手交替、前后交替', down:'只做右手低运球 30 秒，节奏稳住', fun:'教练举手指，队员边运球边报数，报错做 3 个深蹲',
+ phases:['warm','tech']},
+
+{id:'d03', n:'红绿灯运球', cat:'handle', ages:['A','B'], min:10, players:'6–20 人', space:'半场', gear:['球人手一个','红黄绿牌或哨'],
+ goal:'运球时抬头观察，学会急停与启动', setup:'队员持球散布半场，教练站在对面举牌',
+ steps:['绿灯：自由运球前进；红灯：立刻停球并做护球姿势；黄灯：原地变向','连续 3 次判断正确得 1 分','最后 2 分钟改成“红绿灯 + 追人”，被抓到的做 5 个开合跳'],
+ points:['停球时球放腰侧、身体挡在球和对手之间','启动第一步要快，不要先拍球再走','抬头看牌，不看地面'],
+ up:'加入“黄灯必须换手变向 + 加速一步”', down:'只做红绿两色，速度放慢', fun:'把判断变成闯关，连续 3 次全对升级为“绿灯侠”',
+ phases:['warm','game','tech']},
+
+{id:'d04', n:'绕身绕腿运球', cat:'handle', ages:['A','B'], min:8, players:'全体', space:'半场散开', gear:['球人手一个'],
+ goal:'提高手部灵活性与身体协调', setup:'一人一球，原地站立，间距一臂半',
+ steps:['球绕腰一圈换方向，各 5 次','球绕双腿“8 字”各 5 次','绕单腿各 5 次，重心下沉'],
+ points:['球贴身走，不要离身体太远','腰部跟着转，但头保持正','速度慢慢加，掉了立刻捡回继续'],
+ up:'计时 30 秒看能绕多少圈', down:'允许双手递球完成，再过渡到单手', fun:'两人一组互数圈数，输的给赢的捡一次球',
+ phases:['warm','tech']},
+
+{id:'d05', n:'行进间直线运球', cat:'handle', ages:['B','C'], min:10, players:'全体', space:'全场或半场长度', gear:['球人手一个','标志桶 4 个'],
+ goal:'运球推进时保持速度与控球', setup:'分成 2–3 组，底线排队，桶间距 3 米',
+ steps:['右手运球到中线，返回换左手','推球向前：球落在身体前侧 30 厘米','最后两组做“全速运球 + 到桶急停”'],
+ points:['推球不是拍球，手掌跟随球向下压再送出去','身体略前倾，球在身体侧前方','急停时两步减速，球收在腰侧'],
+ up:'加入绕桶变向', down:'降低速度走完 2 趟，不掉球即可',
+ fun:'接力赛制，先完成全组得 3 分',
+ phases:['warm','tech']},
+
+{id:'d06', n:'体前变向', cat:'handle', ages:['B','C'], min:12, players:'全体', space:'半场', gear:['球人手一个','标志桶'],
+ goal:'掌握变向的“低、快、护球、加速”', setup:'三人一排，间距 3 米，桶当防守人',
+ steps:['原地慢速体前变向 10 次，球不过膝','走到桶前变向，变向后第一步加速','加入“变向 + 突破 2 步 + 急停”'],
+ points:['变向时球要低，手在球侧后方','变向后用身体挡住球，肩先过防守','变向不是为了绕，是为了直着过去'],
+ up:'防守人半主动伸手干扰', down:'去掉防守，只做桶前变向', fun:'“过人王”：连续 3 次变向不被碰到得 1 颗星',
+ phases:['tech','match']},
+
+{id:'d07', n:'胯下与背后运球', cat:'handle', ages:['C'], min:12, players:'全体', space:'半场', gear:['球人手一个'],
+ goal:'增加变向手段，应对贴身防守', setup:'原地练习到移动练习，分两段',
+ steps:['原地胯下 8 字各 10 次，重心下沉','背后运球原地各 10 次','行进间胯下变向，从慢走到慢跑'],
+ points:['胯下时腿分开、球从中穿过不要碰腿','背后运球手腕翻转，球贴臀侧','先稳定再加速，别为了花而丢球'],
+ up:'加入“胯下 + 背后”组合连续两次变向', down:'只做原地胯下，不做移动', fun:'“连招挑战”：两次不同变向连做成功加 1 分',
+ phases:['tech','match']},
+
+{id:'d08', n:'运球急停急起', cat:'handle', ages:['C'], min:12, players:'全体', space:'半场', gear:['球人手一个','标志桶'],
+ goal:'在高速中控制身体与球', setup:'两排桶，间距 6 米，做折线',
+ steps:['全速运球到桶，双脚急停、球收腰侧','停 1 秒后再次启动，第一步要大','连续 4 个桶为一组，做 3 组'],
+ points:['急停用两步减速，不要一步刹死','停的时候身体要低，球被身体挡住','启动时球先落地再迈步，避免走步'],
+ up:'急停后加一个投篮动作', down:'降速完成，允许三步停', fun:'折线计时赛，最快的一组得“急停王”',
+ phases:['tech','match']},
+
+{id:'d09', n:'护球抢球', cat:'game', ages:['A','B'], min:10, players:'8–20 人', space:'半场', gear:['球每人一个或每两人一个'],
+ goal:'学会用身体保护球', setup:'半场内散布，一半人持球一半人抢',
+ steps:['持球者运球移动，抢球者只能掏球不能推人','被掏掉的人变成抢球者','2 分钟一轮，共 3 轮'],
+ points:['球放远离对手的一侧','用屁股和肩挡住对手，不要用手推','被逼到边线前先变向回中间'],
+ up:'限制区域缩小，增加难度', down:'抢球者只能慢走，持球者全速', fun:'“球不落地”榜单，被抢次数最少的上榜',
+ phases:['game','warm','match']},
+
+{id:'d10', n:'双手胸前传球', cat:'pass', ages:['A','B'], min:10, players:'两人一组', space:'半场', gear:['球每两人一个'],
+ goal:'掌握蹬地、伸臂、拨指的完整发力', setup:'两人相距 3–4 米，面对面',
+ steps:['原地对传 20 次，接球时双手成“W”迎球','加大距离到 5 米，用蹬地带动','加入“传球后喊名字”，接球人回应'],
+ points:['传球从胸口推出，不要从头顶甩','手指最后拨球，让球带后旋','接球先看球，手先到位再收'],
+ up:'移动中对传，接球后三威胁', down:'缩短到 2 米，用轻球', fun:'连续 10 次不落地升级“黄金搭档”',
+ phases:['warm','tech']},
+
+{id:'d11', n:'击地传球', cat:'pass', ages:['B','C'], min:10, players:'两人一组', space:'半场', gear:['球每两人一个'],
+ goal:'学会在防守下手时从地面送球', setup:'两人相距 4 米，中间放一个标志盘当落点',
+ steps:['击地传球，落点在两人中间偏接球人一侧','接球人低位接球后立刻三威胁','加入防守人举手干扰，从侧面击地'],
+ points:['落点在接球人 2/3 处，太近会弹不起来','传球后手腕下压，球速要快','接球人重心低，手在球下方'],
+ up:'加入防守人，只能击地传球', down:'取消落点要求，先掌握节奏', fun:'“打点赛”：击中标志盘得 1 分',
+ phases:['tech','match']},
+
+{id:'d12', n:'三线快攻传球', cat:'pass', ages:['C'], min:12, players:'9 人以上', space:'全场', gear:['球 2 个'],
+ goal:'在跑动中完成传球与推进', setup:'三人一组，左中右三线，从底线出发',
+ steps:['中路持球推进，传给边路，边路回中','到前场不运球完成上篮','返回换另一组，保持间距'],
+ points:['边路跑在防守人身前，不要并排','传球提前量给到接球人前方','最后一步接球直接起三步，不要停球'],
+ up:'加入一名回防队员', down:'允许运一次再传', fun:'三人一组比“几秒到前场”，做排行榜',
+ phases:['tech','match']},
+
+{id:'d13', n:'三角传球跑动', cat:'pass', ages:['B','C'], min:12, players:'6 人以上', space:'半场', gear:['球 1–2 个','标志桶'],
+ goal:'传球后移动，建立“传完就走”的习惯', setup:'三个点摆三角，队员站三个点，球在一点',
+ steps:['传球给下一个点，传完跑到那个点的队尾','两圈后换方向','加入第三个球，提高节奏'],
+ points:['传球前先看目标，不看不传','传完立刻跑，不要站着看球','接球人提前伸手要球'],
+ up:'加入防守人干扰传球线路', down:'慢速一圈，教练跟着喊口令', fun:'28 秒内完成两圈为“达标”，破纪录加星',
+ phases:['warm','tech']},
+
+{id:'d14', n:'传球接力赛', cat:'game', ages:['A','B'], min:10, players:'8 人以上', space:'半场', gear:['球 2 个','标志桶'],
+ goal:'在竞争里稳定传球质量', setup:'分两队，每队一路纵队，间隔 5 米',
+ steps:['球从头传到尾，再从头开始','落地或传错要从头来','三局两胜'],
+ points:['越快越容易传丢，先稳再快','接球人喊“我的”，避免抢球','传球后不要挡住下一个人'],
+ up:'改成击地传球或单手传球', down:'缩短距离到 3 米', fun:'输的队做 10 个开合跳，赢的队点名下一轮规则',
+ phases:['game','warm']},
+
+{id:'d15', n:'接球三威胁', cat:'pass', ages:['B','C'], min:10, players:'两人一组', space:'半场', gear:['球每两人一个'],
+ goal:'接球后立刻能投、能传、能突', setup:'两人一组，一人传球一人接',
+ steps:['接球后保持三威胁姿势 2 秒，教练喊“投/传/突”','按口令做第一个动作','加入防守人，接球后 1 秒内做决定'],
+ points:['接球时双脚已准备好，不要接完再调整','球放在腰腹，别举太高','先看篮筐再决定'],
+ up:'防守人上手，必须做出正确选择', down:'无防守，只练姿势与口令反应', fun:'口令反应赛，做错一次换人当教练',
+ phases:['tech','match']},
+
+{id:'d16', n:'篮下擦板投篮', cat:'shoot', ages:['A','B'], min:10, players:'2 人一球', space:'篮下两侧', gear:['球','矮篮筐'],
+ goal:'建立正确的投篮手型与擦板点', setup:'篮筐两侧 45 度，各排一队，距篮 1.5 米',
+ steps:['右手托球，左手扶球，肘对准篮筐','打板上沿方框，投 10 次换边','熟练后加一步移动接球投'],
+ points:['肘不外翻，出手后手腕下压“抓篮筐”','双脚与肩同宽，脚尖朝篮','先近距离命中，再退半步'],
+ up:'退到 3 米做定点投', down:'用更小的球、更低的篮筐', fun:'10 次命中计数，画在墙上做个人纪录',
+ phases:['warm','tech']},
+
+{id:'d17', n:'五点定点投篮', cat:'shoot', ages:['B','C'], min:15, players:'3 人一球', space:'半场', gear:['球','标志盘 5 个'],
+ goal:'稳定五个基础投篮点', setup:'两侧底角、两侧 45 度、正面，各一个点',
+ steps:['每点投 5 次，记录命中','顺时针一圈，再逆时针一圈','两人一球，一人投一人捡，轮换'],
+ points:['每点出手节奏一致，别越投越快','腿先发力，手臂跟随','投丢先看脚，不看手'],
+ up:'加入接球即投、移动接球', down:'缩短到 3 个点、距离 4 米', fun:'队内“点位赛”，每点第一个命中得 1 分',
+ phases:['tech','match']},
+
+{id:'d18', n:'三步上篮', cat:'shoot', ages:['B','C'], min:15, players:'2 人一球', space:'半场', gear:['球','标志桶'],
+ goal:'掌握“一大二小”的节奏与起跳脚', setup:'从 45 度开始，桶标出第一步落点',
+ steps:['不运球走三步，嘴里数“大—小—起”','慢速运球上篮，右手上篮左脚起跳','加一步变向再上篮'],
+ points:['第一步大、第二步小，最后一步起跳','起跳脚与投篮手相反','球举到耳侧，别从腰上甩'],
+ up:'加入防守人追防、左右手上篮', down:'去掉运球，先走步练节奏', fun:'连续命中 3 球升级“上篮达人”',
+ phases:['tech','match']},
+
+{id:'d19', n:'移动接球投篮', cat:'shoot', ages:['C'], min:12, players:'3 人一组', space:'半场', gear:['球','标志桶'],
+ goal:'在移动中完成接球与出手', setup:'底线跑到 45 度接球投，传球人固定',
+ steps:['从底线跑到点，接球后立刻出手','左右两侧各 5 次','加入“接球前一拍调整脚步”'],
+ points:['接球前先减速，脚落地再出手','传球要传到胸口高度','起跳垂直，不要后仰'],
+ up:'加入防守人追防', down:'改成定点接球投', fun:'命中率排行榜，每周更新',
+ phases:['tech','match']},
+
+{id:'d20', n:'投篮九宫格', cat:'game', ages:['A','B'], min:12, players:'4–12 人', space:'半场', gear:['球','粉笔或胶带画格'],
+ goal:'用游戏提高投篮兴趣与命中率', setup:'篮下墙面画 3×3 格，每格写分数',
+ steps:['每队轮流投，投中哪格得对应分','先到 15 分的队赢','最后一轮改成“必须投中指定的格”'],
+ points:['不为了高分乱投，先稳住手型','每队自己记分，练算术','排队距离统一'],
+ up:'把格子缩小、增加远距离格', down:'格子放大、允许近距离', fun:'“神射手”称号给本轮最高分',
+ phases:['game','warm']},
+
+{id:'d21', n:'罚球节奏投', cat:'shoot', ages:['C'], min:8, players:'全体', space:'罚球线', gear:['球'],
+ goal:'建立固定罚球节奏，抗干扰', setup:'罚球线排队，每人 2 球一轮',
+ steps:['运 3 次球—深呼吸—出手，固定流程','每人 10 球，记录命中','最后一轮加入噪音干扰'],
+ points:['节奏比姿势更重要，流程不要变','出手后保持跟随动作 1 秒','累的时候先放慢呼吸'],
+ up:'疲劳状态下的罚球（折返跑后立即罚）', down:'前移 1 米投', fun:'队内罚球赛，输的捡球',
+ phases:['cool','tech']},
+
+{id:'d22', n:'防守滑步', cat:'foot', ages:['B','C'], min:10, players:'全体', space:'半场', gear:['标志桶'],
+ goal:'掌握低重心横移，不交叉脚', setup:'两人一组，一攻一防，间隔 2 米',
+ steps:['防守姿势：屈膝、手张开、看腰','跟随进攻人横移 10 米，不交叉脚','加入“进攻人可突一边”，防守人不许伸手'],
+ points:['重心低、屁股下沉，别直立','脚不交叉，先迈后拖','看对手腰，不看球'],
+ up:'进攻人加速变向，防守人保持一步距离', down:'慢速跟随，只练姿势', fun:'“影子防守”：跟住 20 秒不被过掉得 1 分',
+ phases:['warm','tech']},
+
+{id:'d23', n:'标志桶脚步梯', cat:'foot', ages:['A','B'], min:10, players:'全体', space:'半场', gear:['标志桶 6 个'],
+ goal:'提高脚步灵活性、反应与协调', setup:'桶排成一列，间距 1.5 米',
+ steps:['单脚跳、双脚跳、侧向滑步各走一趟','听口令换动作：哨声一响换方向','两人一组比赛通过时间'],
+ points:['落地轻，膝盖对准脚尖','身体前倾，不要弯腰驼背','眼睛看前方桶，不低头'],
+ up:'加入持球完成，边运球边走', down:'去掉比赛，慢速通过', fun:'计时挑战，破纪录加一颗星',
+ phases:['warm','tech']},
+
+{id:'d24', n:'影子防守', cat:'game', ages:['A','B'], min:8, players:'两人一组', space:'半场', gear:['无需器材'],
+ goal:'练习跟随与反应，不伸手犯规', setup:'两人一组，一人领先一人跟随',
+ steps:['跟随者模仿领先者的所有动作（走、停、跳、变向）','30 秒换人','最后加入“抢位置”：跟随者要挡在领先者前面'],
+ points:['脚步跟上，不要用手拉','保持一臂距离，眼睛看对方腰','被晃开先回位再追'],
+ up:'加入球，领先者运球，跟随者抢位', down:'只做走与停，速度慢', fun:'“影子王”：30 秒没被甩开的得称号',
+ phases:['warm','game','match']},
+
+{id:'d25', n:'前后转身与交叉步', cat:'foot', ages:['C'], min:10, players:'全体', space:'半场', gear:['球可选'],
+ goal:'掌握转身护球与摆脱', setup:'原地练前转身、后转身，再过渡到持球',
+ steps:['前转身：以一脚为轴，另一脚跨过身体','后转身：轴心脚不变，身体后撤','持球做“转身 + 面框”，各 8 次'],
+ points:['轴心脚不拖动，转身时球贴身体','转身后先看篮筐','低重心，肩不要抬'],
+ up:'加入防守人，转身摆脱后必须面框', down:'徒手完成，不加球', fun:'“转身达人”评级：连续 5 次不失误',
+ phases:['tech','match']},
+
+{id:'d26', n:'折返跑接力', cat:'phys', ages:['B','C'], min:10, players:'4 人一组', space:'篮球场宽度', gear:['标志桶'],
+ goal:'提高短距离加速与体能', setup:'边线到罚球线折返，距离约 5.8 米',
+ steps:['每人 4 趟为一组，做 2 组，组间休息 90 秒','触线才算，脚必须过线','接力赛制，全组完成计时'],
+ points:['转身用低重心，不要绕大圈','前 2 趟别冲太猛','累了先调整呼吸，不要硬撑'],
+ up:'增加趟数到 6 趟', down:'减少到 2 趟，允许走回', fun:'全队总时间排行榜，每周挑战一次',
+ phases:['warm','match']},
+
+{id:'d27', n:'核心与平衡', cat:'phys', ages:['A','B','C'], min:8, players:'全体', space:'半场', gear:['垫子可选'],
+ goal:'建立躯干稳定，减少受伤', setup:'散开，一人一块空间',
+ steps:['平板支撑 20–30 秒 × 2','单腿站立接球（自己抛自己接）左右各 10 次','臀桥 12 次 × 2'],
+ points:['腰不塌、屁股不翘，身体一条线','呼吸不断，不要憋气','青少年以自重为主，不加负重'],
+ up:'加入不稳定面（垫子、软垫）', down:'膝盖跪姿平板支撑', fun:'“稳如雕像”挑战：谁的单腿站立不掉球最久',
+ phases:['warm','cool']},
+
+{id:'d28', n:'1v1 攻防', cat:'phys', ages:['B','C'], min:15, players:'两人一组', space:'半场', gear:['球'],
+ goal:'把技术用在真实对抗里', setup:'半场两侧，进攻从 45 度开始，一次进攻 8 秒',
+ steps:['进攻方最多运 3 次，必须做出投篮或上篮','防守方全力防，抢到球转换攻防','每轮 3 分钟，记录得分'],
+ points:['先看篮筐再决定怎么突','被防住就回传或重新组织，别硬冲','防守先站位，不要一上来就掏球'],
+ up:'限制运球次数为 2 次', down:'允许无限运球，防守只站位', fun:'计分擂台：赢的留在场上，连赢 3 场称“场王”',
+ phases:['match','game']},
+
+{id:'d29', n:'3v3 半场', cat:'phys', ages:['C'], min:20, players:'6 人以上', space:'半场', gear:['球','分队背心'],
+ goal:'建立空间、传球与协防意识', setup:'半场 3v3，进球后交换球权，11 分一局',
+ steps:['先打 5 分钟自由打，教练不说话','暂停 1 分钟，只讲一件事：拉开空间','再打 5 分钟，要求每次进攻至少传 2 次'],
+ points:['无球人要移动，不要站着看','持球人先看内线再看外线','防守喊“我的”，避免两人扑一个'],
+ up:'加入 12 秒进攻限制', down:'改成 3v3 无运球（只能传和投）', fun:'每局结束选一名“最佳队友”，由队友投票',
+ phases:['match']},
+
+{id:'d30', n:'卡位抢篮板', cat:'foot', ages:['C'], min:10, players:'两人一组', space:'篮下', gear:['球'],
+ goal:'学会先卡位再抢球', setup:'两人一组站在罚球线附近，教练投篮',
+ steps:['球出手瞬间转身挡人，屁股顶住对手','把对手挡在身后再去抢','抢到球的人进攻，另一人防守'],
+ points:['先找人再找球，别盯着球跳','膝盖弯、重心低、双臂张开','抢到球先护球，别急着运'],
+ up:'加入第三人争抢', down:'只做卡位不抢球，练站位', fun:'篮板王计数，抢到 5 个换称号',
+ phases:['tech','match']},
+
+{id:'d31', n:'老鹰捉小鸡运球版', cat:'game', ages:['A'], min:8, players:'8 人以上', space:'半场', gear:['球每人一个'],
+ goal:'在玩中练习抬头运球与变向', setup:'一人当老鹰不带球，其余带球在区域内',
+ steps:['老鹰只能拍到球算抓到，不能推人','被抓到的人变成老鹰','区域逐渐缩小，增加紧张感'],
+ points:['球放远侧，用身体挡','被追时先变向再加速','抬头看老鹰位置'],
+ up:'老鹰增加到两人', down:'区域放大、老鹰慢走', fun:'最后 3 人获“逃脱大师”',
+ phases:['game','warm','match']},
+
+{id:'d32', n:'数字抱团', cat:'game', ages:['A','B'], min:6, players:'8 人以上', space:'半场', gear:['无需器材'],
+ goal:'热身、提高反应与团队意识', setup:'队员慢跑，教练随机喊数字',
+ steps:['喊“3”就 3 个人抱团，落单的人做 5 个开合跳','喊“颜色”则去找对应颜色标志盘','2 分钟一轮，共 3 轮'],
+ points:['跑动中注意看人，不要撞','落单不批评，改成做动作','喊数要突然，保持趣味'],
+ up:'加入运球完成抱团', down:'改为慢走，减少碰撞', fun:'先笑出来的当下一轮“发令员”',
+ phases:['warm','game']},
+
+{id:'d33', n:'团队计分赛', cat:'game', ages:['B','C'], min:15, players:'8 人以上', space:'半场', gear:['球','记分牌'],
+ goal:'用积分把训练内容串成一节课的比赛', setup:'分两队，设 3 个关卡：运球、传球、投篮',
+ steps:['每关按完成质量给 1–3 分','三关结束总分高者赢','最后一关加“全队罚球”，每人 1 球'],
+ points:['评分看动作质量，不只看速度','每关换裁判（队员互评）','输赢都复盘一句“我们哪里做得好”'],
+ up:'增加时间限制与难度关卡', down:'减少关卡，只做两关', fun:'冠军队伍获得下节课“选歌权”或“命名权”',
+ phases:['game','match','cool']},
+
+{id:'d34', n:'投篮收尾 + 一句话复盘', cat:'shoot', ages:['A','B','C'], min:6, players:'全体', space:'半场', gear:['球'],
+ goal:'用轻松投篮结束训练，给孩子留下一个明确的正向印象', setup:'半场自由投篮，最后集合成一圈',
+ steps:['自由投篮 3 分钟，进不进都不喊停','围成一圈，每人说一句“今天我做好的一个动作”','教练只总结一个下节课要改的点'],
+ points:['收尾先肯定，再做纠正，一次只讲一件事','让孩子自己说，教练不代答','控制在 6 分钟内，别拖成总结大会'],
+ up:'加“最后一球定胜负”的小仪式', down:'年龄小的只说一个词', fun:'谁说得最具体，得一枚“会说”的小印章',
+ phases:['cool']},
+
+{id:'d35', n:'静态拉伸与呼吸', cat:'phys', ages:['A','B','C'], min:6, players:'全体', space:'半场散开', gear:['无需器材'],
+ goal:'降低心率，放松肩颈与腿部，减少第二天酸痛', setup:'散开，一人一块空间，教练带做',
+ steps:['大腿前后侧、小腿各拉伸 20 秒，左右都做','深呼吸 5 次：吸气 3 秒、呼气 5 秒','肩绕环前后各 10 次'],
+ points:['拉伸保持不动，不要弹震','呼吸慢而长，不要憋气','出现疼痛立刻停，不硬压'],
+ up:'有泡沫轴时加入滚压', down:'只做呼吸与肩绕环', fun:'“最安静的一分钟”：全队不出声完成呼吸练习',
+ phases:['cool']}
+];
+
+const FUN_CHALLENGES = [
+  {t:'10 秒原地快速运球', s:'原地快运', d:'数一数 10 秒能拍多少下，全队排名'},
+  {t:'闭眼绕球 5 圈', s:'闭眼绕球', d:'闭眼做绕腰，睁眼检查球还在手上'},
+  {t:'单腿站立接球 10 次', s:'单腿接球', d:'自己抛自己接，掉一次从头数'},
+  {t:'罚球线一球定胜负', s:'罚球决胜', d:'全队轮流一球，进的人所在队加 2 分'},
+  {t:'30 秒防守滑步', s:'防守滑步', d:'跟着教练的手左右滑，脚不许交叉'},
+  {t:'传球 20 次不落地', s:'传球不落', d:'两人一组，掉了重新开始'},
+  {t:'左手运球 30 秒', s:'左手运球', d:'只用弱侧手，抬头看教练'},
+  {t:'三步上篮左右各 3 次', s:'左右上篮', d:'两边都要进，进一边加 1 分'},
+  {t:'背对篮筐投篮', d:'转身 180 度后立刻出手，纯娱乐'},
+  {t:'全队平板支撑接力', d:'每人 20 秒，断了重来'}
+];
+
+const BADGES = [
+  {id:'first', n:'首练开张', d:'完成 1 次训练'},
+  {id:'ten', n:'十次打卡', d:'累计 10 次训练'},
+  {id:'streak', n:'连续三天', d:'连续 3 天有训练'},
+  {id:'min300', n:'三百分钟', d:'累计训练 300 分钟'},
+  {id:'perfect', n:'全员到齐', d:'一次训练全员出勤'},
+  {id:'wheel', n:'转盘手', d:'转盘抽 5 次挑战'}
+];
+
+const SAFETY = [
+  '6–8 岁用 3 号球、篮筐 2.35 米；9–11 岁 4–5 号球、2.60 米；12 岁以上再上标准筐。',
+  '每次训练前 8–10 分钟动态热身，不做静态拉伸代替热身。',
+  '12 岁以下不做大重量力量训练，以自重、跑跳、核心为主。',
+  '每 15 分钟安排一次喝水，夏天避开正午高温时段。',
+  '出现膝踝疼痛立即停止该动作，改用低冲击替代（投篮、传球）。'
+];
+
+const SEED_PLAYERS = [
+  {id:'p1', n:'小宇', age:9, band:'B', pos:'后卫'},
+  {id:'p2', n:'晨晨', age:10, band:'B', pos:'前锋'},
+  {id:'p3', n:'乐乐', age:8, band:'A', pos:'后卫'},
+  {id:'p4', n:'子轩', age:12, band:'C', pos:'中锋'},
+  {id:'p5', n:'豆豆', age:7, band:'A', pos:'前锋'},
+  {id:'p6', n:'阿哲', age:11, band:'B', pos:'前锋'},
+  {id:'p7', n:'小满', age:13, band:'C', pos:'后卫'},
+  {id:'p8', n:'果果', age:9, band:'B', pos:'中锋'}
+];
+/* =====================================================================
+   状态 / 工具
+   ===================================================================== */
+const LS_KEY = 'xlq.v1';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.prototype.slice.call(r.querySelectorAll(s));
+const uid = () => Math.random().toString(36).slice(2, 9);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = (n) => (n < 10 ? '0' + n : '' + n);
+const iso = (d) => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const TODAY = iso(new Date());
+const WD = ['周日','周一','周二','周三','周四','周五','周六'];
+const dateCn = (s) => { const d = new Date(s + 'T00:00:00'); return (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + WD[d.getDay()]; };
+
+const state = {
+  plans: [], sessions: [], players: [], measures: [],
+  flags: {wheel: 0}, team: {red: 0, blue: 0},
+  draft: null
+};
+const ui = { libBand: 'all', libCat: 'all', build: {band: 'B', minutes: 60, theme: 'all'} };
+
+function load() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) {
+      const o = JSON.parse(raw);
+      ['plans','sessions','players','measures'].forEach((k) => { if (Array.isArray(o[k])) state[k] = o[k]; });
+      if (o.flags) state.flags = Object.assign(state.flags, o.flags);
+      if (o.team) state.team = Object.assign(state.team, o.team);
+    } else {
+      state.players = SEED_PLAYERS.map((p) => Object.assign({}, p));
+    }
+  } catch (e) { state.players = SEED_PLAYERS.map((p) => Object.assign({}, p)); }
+}
+function save() {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify({
+      plans: state.plans, sessions: state.sessions, players: state.players,
+      measures: state.measures, flags: state.flags, team: state.team
+    }));
+  } catch (e) { toast('浏览器不允许本地保存，本次修改不会保留'); }
+}
+const drillOf = (id) => DRILLS.find((d) => d.id === id);
+const ageOf = (id) => AGES.find((a) => a.id === id) || AGES[1];
+const catOf = (id) => CATS.find((c) => c.id === id);
+const phaseOf = (id) => PHASES.find((p) => p.id === id);
+
+let toastTimer = null;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 2200);
+}
+function beep() {
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    beep.ctx = beep.ctx || new AC();
+    const o = beep.ctx.createOscillator(), g = beep.ctx.createGain();
+    o.type = 'sine'; o.frequency.value = 900; g.gain.value = 0.12;
+    o.connect(g); g.connect(beep.ctx.destination); o.start();
+    setTimeout(() => { try { o.stop(); g.disconnect(); } catch (e) {} }, 300);
+  } catch (e) {}
+}
+
+/* 统计 */
+function totalMinutes() { return state.sessions.reduce((s, x) => s + (x.minutes || 0), 0); }
+function weekDates() {
+  const now = new Date(); const dow = (now.getDay() + 6) % 7;
+  const mon = new Date(now); mon.setDate(now.getDate() - dow);
+  const arr = [];
+  for (let i = 0; i < 7; i++) { const d = new Date(mon); d.setDate(mon.getDate() + i); arr.push(iso(d)); }
+  return arr;
+}
+function weekSessions() { const w = weekDates(); return state.sessions.filter((s) => w.indexOf(s.date) >= 0); }
+function streakDays() {
+  const dates = Array.from(new Set(state.sessions.map((s) => s.date)));
+  if (!dates.length) return 0;
+  const cur = new Date(TODAY + 'T00:00:00');
+  if (dates.indexOf(TODAY) < 0) cur.setDate(cur.getDate() - 1);
+  let n = 0;
+  while (dates.indexOf(iso(cur)) >= 0) { n++; cur.setDate(cur.getDate() - 1); }
+  return n;
+}
+function attendanceRate() {
+  const roster = state.players.length;
+  if (!state.sessions.length || !roster) return null;
+  const possible = state.sessions.length * roster;
+  const got = state.sessions.reduce((s, x) => s + (x.attendees ? x.attendees.length : 0), 0);
+  return Math.min(100, Math.round((got / possible) * 100));
+}
+function badgeState() {
+  const s = state.sessions; const streak = streakDays(); const tot = totalMinutes();
+  const perfect = state.players.length > 0 && s.some((x) => (x.attendees || []).length >= state.players.length);
+  return {
+    first: s.length >= 1, ten: s.length >= 10, streak: streak >= 3,
+    min300: tot >= 300, perfect: perfect, wheel: state.flags.wheel >= 5
+  };
+}
+
+/* 教案生成 */
+function pickPool(band, phase, theme) {
+  const pool = DRILLS.filter((d) => d.ages.indexOf(band) >= 0 && d.phases.indexOf(phase) >= 0);
+  if (!pool.length) return DRILLS.filter((d) => d.ages.indexOf(band) >= 0);
+  if (theme === 'all') return pool;
+  const preferred = pool.filter((d) => d.cat === theme);
+  return preferred.length >= 2 ? preferred.concat(pool.filter((d) => d.cat !== theme)) : pool;
+}
+function genPlan(band, minutes, theme) {
+  const pct = band === 'A'
+    ? {warm: 0.20, tech: 0.26, game: 0.26, match: 0.18}
+    : band === 'B'
+    ? {warm: 0.20, tech: 0.30, game: 0.16, match: 0.24}
+    : {warm: 0.18, tech: 0.30, game: 0.10, match: 0.32};
+  const durs = {};
+  let acc = 0;
+  PHASES.slice(0, 4).forEach((ph) => {
+    durs[ph.id] = Math.max(5, Math.round(minutes * pct[ph.id] / 5) * 5);
+    acc += durs[ph.id];
+  });
+  durs.cool = minutes - acc;
+  if (durs.cool < 5) {
+    let need = 5 - durs.cool;
+    durs.cool = 5;
+    ['match', 'tech', 'game', 'warm'].forEach((k) => {
+      if (need <= 0) return;
+      const take = Math.min(need, durs[k] - 5);
+      durs[k] -= take; need -= take;
+    });
+  }
+  const used = [];
+  const segs = [];
+  PHASES.forEach((ph) => {
+    const dur = durs[ph.id];
+    if (dur < 3) return;
+    let pool = pickPool(band, ph.id, theme).filter((d) => used.indexOf(d.id) < 0);
+    if (!pool.length) pool = pickPool(band, ph.id, theme);
+    let n = dur <= 8 ? 1 : dur <= 18 ? 2 : 3;
+    const chosen = [];
+    while (n > 0 && pool.length) {
+      const i = Math.floor(Math.random() * pool.length);
+      chosen.push(pool[i]); used.push(pool[i].id); pool.splice(i, 1); n--;
+    }
+    if (!chosen.length) {
+      const any = DRILLS.filter((d) => d.ages.indexOf(band) >= 0);
+      chosen.push(any[Math.floor(Math.random() * any.length)]);
+    }
+    const base = Math.floor(dur / chosen.length);
+    chosen.forEach((d, k) => {
+      segs.push({phase: ph.id, drillId: d.id, min: k === chosen.length - 1 ? dur - base * (chosen.length - 1) : base});
+    });
+  });
+  const themeN = THEMES.find((t) => t.id === theme).n;
+  return {
+    id: uid(), title: ageOf(band).t + ' · ' + themeN + '训练课',
+    band: band, minutes: minutes, theme: theme, segs: segs,
+    createdAt: TODAY
+  };
+}
+
+/* =====================================================================
+   路由
+   ===================================================================== */
+const TABS = [
+  {id: 'home', n: '今日'},
+  {id: 'build', n: '备课'},
+  {id: 'library', n: '训练库'},
+  {id: 'coach', n: '执教'},
+  {id: 'squad', n: '球队'}
+];
+const ICONS = {
+  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10.5 12 4l8 6.5V20H4z"/><path d="M9.5 20v-5h5v5"/></svg>',
+  build: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16"/><path d="M4 9h16M9 9v11"/></svg>',
+  library: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5v17"/></svg>',
+  coach: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg>',
+  squad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><circle cx="17" cy="9" r="2.4"/><path d="M15 19c0-2.4 1.6-4 3.6-4 1.7 0 2.4.8 2.4 1.2"/></svg>'
+};
+let route = 'home';
+
+function go(r) { if (location.hash === '#/' + r) render(); else location.hash = '#/' + r; }
+
+function render() {
+  route = (location.hash || '#/home').replace('#/', '') || 'home';
+  if (['home','build','library','coach','squad','fun','stats','doc'].indexOf(route) < 0) route = 'home';
+  $$('.view').forEach((v) => v.classList.remove('on'));
+  const v = $('#view-' + route);
+  if (v) { v.classList.add('on'); v.innerHTML = RENDER[route](); }
+  $('#tabbar').innerHTML = TABS.map((t) =>
+    '<a class="tab ' + (route === t.id ? 'on' : '') + '" href="#/' + t.id + '">' + ICONS[t.id] + '<span>' + t.n + '</span></a>'
+  ).join('');
+  $('#navTop').innerHTML = TABS.map((t) =>
+    '<a class="' + (route === t.id ? 'on' : '') + '" href="#/' + t.id + '">' + t.n + '</a>'
+  ).join('') + '<a class="' + (route === 'fun' ? 'on' : '') + '" href="#/fun">趣味</a>' +
+  '<a class="' + (route === 'stats' ? 'on' : '') + '" href="#/stats">数据</a>' +
+  '<a class="' + (route === 'doc' ? 'on' : '') + '" href="#/doc">说明</a>';
+  const st = streakDays();
+  $('#topMeta').innerHTML = '<span class="chip">' + TODAY.slice(5).replace('-', '/') + ' ' + WD[new Date().getDay()] + '</span>' +
+    '<span class="chip"><i class="dot"></i>连续 <b class="num">' + st + '</b> 天</span>';
+  if (route === 'coach') mountTimer();
+}
+
+const RENDER = {};
+
+/* =====================================================================
+   视图：今日
+   ===================================================================== */
+RENDER.home = function () {
+  const ws = weekSessions();
+  const latest = state.plans[0];
+  const attendedToday = state.sessions.some((s) => s.date === TODAY);
+  const heroCta = state.draft
+    ? '<a class="btn btn-p" href="#/build">继续备这节课</a>'
+    : '<button class="btn btn-p" data-act="quick-gen">一键生成今日教案</button>';
+  return '' +
+  '<div class="hero">' + courtSvg() + '<div class="hero-body">' +
+    '<div class="hero-k">今日 · ' + dateCn(TODAY) + '</div>' +
+    '<h1 class="hero-t">把一节课备到<br><em>能直接开练</em></h1>' +
+    '<p class="hero-sub">选年龄、选时长、选主题，自动排出热身到放松的五段课；到球场用手机打开，直接照着带。</p>' +
+    '<div class="hero-foot">' + heroCta +
+      '<button class="btn btn-g" data-act="go" data-arg="library">看训练库 ' + DRILLS.length + ' 个动作</button>' +
+    '</div>' +
+    '<div class="row" style="gap:8px;flex-wrap:wrap">' +
+      '<span class="magnet"><i></i>' + state.players.length + ' 名球员</span>' +
+      '<span class="magnet"><i></i>本周 ' + ws.length + ' 次训练</span>' +
+      '<span class="magnet"><i style="background:' + (attendedToday ? 'var(--teal)' : 'var(--dim)') + '"></i>' +
+        (attendedToday ? '今日已记录' : '今日未训练') + '</span>' +
+    '</div>' +
+  '</div></div>' +
+
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>继续</h2><span class="sub">教案与执教</span></div>' +
+    (latest
+      ? '<div class="card"><div class="row between"><div><div style="font-weight:700">' + esc(latest.title) + '</div>' +
+        '<div class="seg-p" style="margin-top:4px">' + latest.minutes + ' 分钟 · ' + latest.segs.length + ' 个环节 · ' + esc(latest.createdAt) + '</div></div>' +
+        '<button class="btn btn-p btn-s" data-act="coach-start" data-arg="' + latest.id + '">开始带</button></div>' +
+        '<div class="row" style="margin-top:10px;gap:8px"><button class="btn btn-g btn-s" data-act="plan-print" data-arg="' + latest.id + '">打印教案</button>' +
+        '<a class="btn btn-g btn-s" href="#/build">新建一节课</a></div></div>'
+      : '<div class="empty">还没有教案。点上面的「一键生成」，30 秒排出一节课。</div>') +
+  '</div>' +
+
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>今日提醒</h2><span class="sub">按年龄分组看</span></div>' +
+    '<div class="grid g3">' + AGES.map((a) =>
+      '<div class="card"><div class="tag ' + a.id.toLowerCase() + '">' + a.n + '</div>' +
+      '<div style="font-weight:700;margin:8px 0 2px">' + a.t + '</div>' +
+      '<div class="seg-d">' + a.ball + '</div>' +
+      '<div class="note" style="margin-top:8px">' + a.tip + '</div></div>'
+    ).join('') + '</div>' +
+  '</div>' +
+
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>安全底线</h2><span class="sub">每节课都要守</span></div>' +
+    '<div class="card"><ul class="blk" style="border:0;margin:0;padding:0">' +
+      SAFETY.map((s) => '<li>' + s + '</li>').join('') + '</ul></div>' +
+  '</div>' +
+
+  '<div class="sec"><div class="grid g2">' +
+    '<a class="card" href="#/fun" style="text-decoration:none;color:inherit"><div class="seg-p">趣味</div>' +
+      '<div style="font-weight:800;font-size:17px;margin-top:4px">转盘 · 计分板 · 徽章</div>' +
+      '<div class="seg-d">孩子坐不住时，用它把训练变成游戏</div></a>' +
+    '<a class="card" href="#/stats" style="text-decoration:none;color:inherit"><div class="seg-p">数据</div>' +
+      '<div style="font-weight:800;font-size:17px;margin-top:4px">本周 ' + ws.length + ' 次 · ' + ws.reduce((s, x) => s + x.minutes, 0) + ' 分钟</div>' +
+      '<div class="seg-d">出勤、时长、徽章进度</div></a>' +
+  '</div></div>';
+};
+
+function courtSvg() {
+  return '<svg class="hero-court" viewBox="0 0 800 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
+    '<rect x="0" y="0" width="800" height="420" fill="#121714"/>' +
+    '<g stroke="#E4551D" stroke-opacity="0.28" fill="none" stroke-width="2">' +
+      '<rect x="40" y="40" width="720" height="340"/>' +
+      '<line x1="400" y1="40" x2="400" y2="380"/>' +
+      '<circle cx="400" cy="210" r="52"/>' +
+      '<path d="M40 130 h120 v160 h-120"/>' +
+      '<path d="M160 176 a44 44 0 0 1 0 68"/>' +
+      '<path d="M760 130 h-120 v160 h120"/>' +
+      '<path d="M640 176 a44 44 0 0 0 0 68"/>' +
+      '<path d="M40 118 q120 -60 240 0" stroke-opacity="0.12"/>' +
+    '</g>' +
+    '<g fill="#E4551D" fill-opacity="0.5">' +
+      '<circle cx="150" cy="200" r="4"/><circle cx="300" cy="120" r="4"/><circle cx="520" cy="290" r="4"/>' +
+      '<circle cx="640" cy="150" r="4"/><circle cx="430" cy="330" r="4"/><circle cx="250" cy="300" r="4"/>' +
+    '</g>' +
+    '<defs><linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">' +
+      '<stop offset="0" stop-color="#0E1210" stop-opacity="0.92"/>' +
+      '<stop offset="0.62" stop-color="#0E1210" stop-opacity="0.55"/>' +
+      '<stop offset="1" stop-color="#0E1210" stop-opacity="0.2"/>' +
+    '</linearGradient></defs>' +
+    '<rect x="0" y="0" width="800" height="420" fill="url(#fade)"/>' +
+  '</svg>';
+}
+
+/* =====================================================================
+   视图：备课
+   ===================================================================== */
+RENDER.build = function () {
+  const b = ui.build;
+  const draft = state.draft;
+  return '' +
+  '<div class="sec" style="margin-top:0">' +
+    '<div class="sec-h"><h2>排一节课</h2><span class="sub">年龄 → 时长 → 主题</span></div>' +
+    '<div class="card">' +
+      '<div class="field"><label>年龄段</label><div class="row" style="flex-wrap:wrap;gap:8px">' +
+        AGES.map((a) => '<button class="btn btn-s ' + (b.band === a.id ? 'btn-p' : 'btn-g') + '" data-act="set-band" data-arg="' + a.id + '">' + a.n + '　' + a.t + '</button>').join('') +
+      '</div></div>' +
+      '<div class="field"><label>课时长度</label><div class="row" style="flex-wrap:wrap;gap:8px">' +
+        [45, 60, 75, 90].map((m) => '<button class="btn btn-s ' + (b.minutes === m ? 'btn-p' : 'btn-g') + '" data-act="set-min" data-arg="' + m + '">' + m + ' 分钟</button>').join('') +
+      '</div></div>' +
+      '<div class="field"><label>主题</label><div class="row" style="flex-wrap:wrap;gap:8px">' +
+        THEMES.map((t) => '<button class="btn btn-s ' + (b.theme === t.id ? 'btn-p' : 'btn-g') + '" data-act="set-theme" data-arg="' + t.id + '">' + t.n + '</button>').join('') +
+      '</div></div>' +
+      '<div style="margin-top:12px"><button class="btn btn-p btn-block" data-act="gen">生成这节课</button></div>' +
+      '<div class="note" style="margin-top:10px">' + ageOf(b.band).ball + '。生成后可增删环节、加减分钟、单独换掉某个动作。</div>' +
+    '</div>' +
+  '</div>' +
+  (draft ? draftCard(draft) : '') +
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>已保存教案</h2><span class="sub">' + state.plans.length + ' 份</span></div>' +
+    (state.plans.length
+      ? '<div class="list">' + state.plans.map((p) =>
+        '<div class="card"><div class="row between"><div style="min-width:0"><div style="font-weight:700">' + esc(p.title) + '</div>' +
+        '<div class="seg-d">' + p.minutes + ' 分钟 · ' + p.segs.length + ' 环节 · ' + esc(p.createdAt) + '</div></div></div>' +
+        '<div class="row" style="gap:8px;margin-top:10px;flex-wrap:wrap">' +
+          '<button class="btn btn-p btn-s" data-act="coach-start" data-arg="' + p.id + '">开始带</button>' +
+          '<button class="btn btn-g btn-s" data-act="plan-print" data-arg="' + p.id + '">打印</button>' +
+          '<button class="btn btn-g btn-s" data-act="plan-del" data-arg="' + p.id + '">删除</button>' +
+        '</div></div>').join('') + '</div>'
+      : '<div class="empty">还没保存过教案。先在上面生成一节课。</div>') +
+  '</div>';
+};
+
+function draftCard(d) {
+  return '<div class="sec">' +
+    '<div class="sec-h"><h2>课表预览</h2><span class="sub">共 ' + d.minutes + ' 分钟</span></div>' +
+    '<div class="card" style="padding:12px">' +
+      '<div class="row between" style="margin-bottom:10px"><div><div style="font-weight:800;font-size:17px">' + esc(d.title) + '</div>' +
+      '<div class="seg-p" style="margin-top:3px">' + ageOf(d.band).n + ' · ' + THEMES.find((t) => t.id === d.theme).n + ' · ' + d.segs.length + ' 个环节</div></div>' +
+      '<div class="seg-t num">' + d.minutes + '<small>分钟</small></div></div>' +
+      '<div class="list">' + d.segs.map((s, i) => segRow(s, i, true)).join('') + '</div>' +
+      '<div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">' +
+        '<button class="btn btn-p btn-s" data-act="draft-coach">按这节开始带</button>' +
+        '<button class="btn btn-g btn-s" data-act="gen">换一套</button>' +
+        '<button class="btn btn-g btn-s" data-act="draft-save">保存教案</button>' +
+        '<button class="btn btn-g btn-s" data-act="draft-print">打印</button>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function segRow(s, i, editable) {
+  const d = drillOf(s.drillId) || {n: '未找到动作', cat: 'handle', points: []};
+  const ph = phaseOf(s.phase);
+  const pts = (d.points || []).slice(0, 2).join('；');
+  return '<div class="seg">' +
+    '<div class="seg-bar" data-ph="' + s.phase + '"></div>' +
+    '<div style="min-width:0">' +
+      '<div class="seg-p">' + ph.n + '</div>' +
+      '<div class="seg-n">' + esc(d.n) + '</div>' +
+      '<div class="seg-d">' + esc(pts) + '</div>' +
+      (editable ? '<div class="row" style="gap:6px;margin-top:8px">' +
+        '<button class="btn btn-g btn-s" data-act="seg-minus" data-arg="' + i + '">−2 分</button>' +
+        '<button class="btn btn-g btn-s" data-act="seg-plus" data-arg="' + i + '">+2 分</button>' +
+        '<button class="btn btn-g btn-s" data-act="seg-swap" data-arg="' + i + '">换动作</button>' +
+        '<button class="btn btn-g btn-s" data-act="seg-del" data-arg="' + i + '">删除</button>' +
+      '</div>' : '') +
+    '</div>' +
+    '<div class="seg-t num">' + s.min + '<small>分</small></div>' +
+  '</div>';
+}
+
+/* =====================================================================
+   视图：训练库
+   ===================================================================== */
+RENDER.library = function () {
+  const list = DRILLS.filter((d) =>
+    (ui.libBand === 'all' || d.ages.indexOf(ui.libBand) >= 0) &&
+    (ui.libCat === 'all' || d.cat === ui.libCat));
+  return '' +
+  '<div class="sec" style="margin-top:0">' +
+    '<div class="sec-h"><h2>训练库</h2><span class="sub">' + list.length + ' / ' + DRILLS.length + ' 个动作</span></div>' +
+    '<div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:6px">' +
+      '<button class="btn btn-s ' + (ui.libBand === 'all' ? 'btn-p' : 'btn-g') + '" data-act="lib-band" data-arg="all">全部年龄</button>' +
+      AGES.map((a) => '<button class="btn btn-s ' + (ui.libBand === a.id ? 'btn-p' : 'btn-g') + '" data-act="lib-band" data-arg="' + a.id + '">' + a.n + '</button>').join('') +
+    '</div>' +
+    '<div class="row" style="flex-wrap:wrap;gap:6px">' +
+      '<button class="btn btn-s ' + (ui.libCat === 'all' ? 'btn-p' : 'btn-g') + '" data-act="lib-cat" data-arg="all">全部类别</button>' +
+      CATS.map((c) => '<button class="btn btn-s ' + (ui.libCat === c.id ? 'btn-p' : 'btn-g') + '" data-act="lib-cat" data-arg="' + c.id + '">' + c.n + '</button>').join('') +
+    '</div>' +
+    '<div class="list" style="margin-top:12px">' + (list.length ? list.map((d) =>
+      '<button class="drill" data-act="drill" data-arg="' + d.id + '">' +
+        '<div class="drill-idx num">' + d.min + '</div>' +
+        '<div style="min-width:0"><div class="drill-n">' + esc(d.n) + '</div>' +
+        '<div class="drill-m"><span>' + catOf(d.cat).n + '</span><span>' + d.players + '</span><span>' + esc(d.space) + '</span></div></div>' +
+        '<div class="tag ' + d.ages[0].toLowerCase() + '">' + d.ages.map((a) => ageOf(a).n).join(' / ') + '</div>' +
+      '</button>').join('') : '<div class="empty">这个组合下没有动作，换个年龄段试试。</div>') + '</div>' +
+  '</div>';
+};
+
+function drillSheet(id) {
+  const d = drillOf(id);
+  if (!d) return;
+  openSheet(
+    '<div class="sheet-h"><div><div class="seg-p">' + catOf(d.cat).n + '</div><div class="sheet-t">' + esc(d.n) + '</div></div>' +
+      '<button class="close" data-act="close-sheet" aria-label="关闭">✕</button></div>' +
+    '<div class="row" style="gap:6px;flex-wrap:wrap"><span class="tag ' + d.ages[0].toLowerCase() + '">' + d.ages.map((a) => ageOf(a).n).join(' / ') + '</span>' +
+      '<span class="tag">建议 ' + d.min + ' 分钟</span><span class="tag">' + esc(d.players) + '</span><span class="tag">' + esc(d.space) + '</span></div>' +
+    '<dl class="kv"><dt>目标</dt><dd>' + esc(d.goal) + '</dd>' +
+      '<dt>组织</dt><dd>' + esc(d.setup) + '</dd>' +
+      '<dt>器材</dt><dd>' + d.gear.map(esc).join('、') + '</dd></dl>' +
+    '<div class="blk"><h4>做法</h4><ul>' + d.steps.map((s, i) => '<li><b class="num">' + (i + 1) + '.</b> ' + esc(s) + '</li>').join('') + '</ul></div>' +
+    '<div class="blk"><h4>教练要点</h4><ul>' + d.points.map((s) => '<li>' + esc(s) + '</li>').join('') + '</ul></div>' +
+    '<div class="blk"><h4>进阶 / 降阶</h4><ul><li><b>进阶：</b>' + esc(d.up) + '</li><li><b>降阶：</b>' + esc(d.down) + '</li></ul></div>' +
+    '<div class="blk"><h4>趣味化</h4><div class="note">' + esc(d.fun) + '</div></div>' +
+    '<div class="blk"><h4>可放在</h4><div class="row" style="gap:6px;flex-wrap:wrap">' + d.phases.map((p) => '<span class="tag">' + phaseOf(p).n + '</span>').join('') + '</div></div>' +
+    '<div style="margin-top:14px"><button class="btn btn-p btn-block" data-act="drill-add" data-arg="' + d.id + '">加入这节课</button></div>'
+  );
+}
+/* =====================================================================
+   视训：执教（计时器）
+   ===================================================================== */
+const timer = {plan: null, idx: 0, left: 0, running: false, tick: null};
+
+function planById(id) { return state.plans.find((p) => p.id === id); }
+function fmt(sec) { return pad(Math.floor(sec / 60)) + ':' + pad(sec % 60); }
+
+RENDER.coach = function () {
+  if (!timer.plan || !timer.plan.segs.length) {
+    const list = (state.draft ? [state.draft] : []).concat(state.plans);
+    return '<div class="sec" style="margin-top:0">' +
+      '<div class="sec-h"><h2>开始一节训练</h2><span class="sub">选一节课，进入带练模式</span></div>' +
+      (list.length ? '<div class="list">' + list.map((p, i) =>
+        '<button class="drill" data-act="coach-start" data-arg="' + (p.id === (state.draft && state.draft.id) ? 'draft' : p.id) + '">' +
+          '<div class="drill-idx num">' + p.minutes + '</div>' +
+          '<div style="min-width:0"><div class="drill-n">' + esc(p.title) + '</div>' +
+          '<div class="drill-m"><span>' + p.segs.length + ' 个环节</span><span>' + ageOf(p.band).n + '</span><span>' + (i === 0 && state.draft ? '未保存' : esc(p.createdAt)) + '</span></div></div>' +
+          '<div class="tag b">开始</div>' +
+        '</button>').join('') + '</div>'
+      : '<div class="empty">还没有教案，先去「备课」生成一节课。</div>') +
+      '</div>';
+  }
+  const p = timer.plan;
+  const seg = p.segs[timer.idx];
+  const d = drillOf(seg.drillId) || {n: '未找到动作', points: [], steps: []};
+  const total = seg.min * 60;
+  const pctv = total ? Math.round((1 - timer.left / total) * 100) : 0;
+  return '<div class="sec" style="margin-top:0">' +
+    '<div class="timer-wrap"><div class="timer">' +
+      '<div class="row between"><div class="timer-n">' + (timer.idx + 1) + ' / ' + p.segs.length + ' · ' + phaseOf(seg.phase).n + '</div>' +
+        '<button class="btn btn-g btn-s" data-act="timer-exit">结束本节</button></div>' +
+      '<div class="timer-v num" id="timerV">' + fmt(timer.left) + '</div>' +
+      '<div class="timer-t" id="timerSegName">' + esc(d.n) + '　·　本段 ' + seg.min + ' 分钟</div>' +
+      '<div class="progress"><i id="timerBar" style="width:' + pctv + '%"></i></div>' +
+      '<div class="row" style="gap:8px;margin-top:12px">' +
+        '<button class="btn btn-p" style="flex:1" data-act="timer-toggle" id="timerBtn">' + (timer.running ? '暂停' : (timer.left === seg.min * 60 ? '开始计时' : '继续')) + '</button>' +
+        '<button class="btn btn-g" data-act="timer-prev">上一段</button>' +
+        '<button class="btn btn-g" data-act="timer-next">下一段</button>' +
+      '</div>' +
+    '</div></div>' +
+
+    '<div class="sec"><div class="sec-h"><h2>本段要点</h2><span class="sub">' + catOf(d.cat).n + '</span></div>' +
+      '<div class="card"><div class="note">' + esc(d.goal) + '</div>' +
+        '<div class="blk"><h4>做法</h4><ul>' + (d.steps || []).map((s, i) => '<li><b class="num">' + (i + 1) + '.</b> ' + esc(s) + '</li>').join('') + '</ul></div>' +
+        '<div class="blk"><h4>盯这几点</h4><ul>' + (d.points || []).map((s) => '<li>' + esc(s) + '</li>').join('') + '</ul></div>' +
+        '<div class="blk"><h4>带不动了就降阶</h4><div class="note">' + esc(d.down) + '</div></div>' +
+      '</div></div>' +
+
+    '<div class="sec"><div class="sec-h"><h2>整节课</h2><span class="sub">' + p.minutes + ' 分钟 · 点一下跳段</span></div>' +
+      '<div class="list">' + p.segs.map((s, i) => {
+        const dd = drillOf(s.drillId) || {n: '—'};
+        const on = i === timer.idx;
+        return '<button class="seg" data-act="timer-jump" data-arg="' + i + '" style="' + (on ? 'border-color:var(--ball)' : '') + ';text-align:left;width:100%">' +
+          '<div class="seg-bar" style="opacity:' + (on ? 1 : 0.45) + '"></div>' +
+          '<div style="min-width:0"><div class="seg-p">' + phaseOf(s.phase).n + (on ? ' · 进行中' : '') + '</div>' +
+          '<div class="seg-n">' + esc(dd.n) + '</div></div>' +
+          '<div class="seg-t num" style="font-size:15px">' + s.min + '<small>分</small></div>' +
+        '</button>';
+      }).join('') + '</div></div>' +
+    '<div style="height:8px"></div>';
+};
+
+function updateTimerDom() {
+  const v = $('#timerV'), bar = $('#timerBar'), nm = $('#timerSegName'), btn = $('#timerBtn');
+  if (!v || !timer.plan) return;
+  const seg = timer.plan.segs[timer.idx];
+  const total = seg.min * 60;
+  v.textContent = fmt(timer.left);
+  v.classList.toggle('low', timer.left <= 30 && timer.left > 0);
+  bar.style.width = (total ? Math.round((1 - timer.left / total) * 100) : 0) + '%';
+  if (nm) nm.textContent = (drillOf(seg.drillId) || {n: ''}).n + '　·　本段 ' + seg.min + ' 分钟';
+  if (btn) btn.textContent = timer.running ? '暂停' : (timer.left === total ? '开始计时' : '继续');
+}
+
+function startTick() {
+  if (timer.tick) clearInterval(timer.tick);
+  timer.tick = setInterval(() => {
+    if (!timer.running) return;
+    timer.left--;
+    if (timer.left <= 0) {
+      timer.left = 0; timer.running = false;
+      clearInterval(timer.tick); timer.tick = null;
+      beep(); toast('本段时间到，换下一段');
+    }
+    updateTimerDom();
+  }, 1000);
+}
+function mountTimer() {
+  if (!timer.plan) return;
+  updateTimerDom();
+  if (timer.running && !timer.tick) startTick();
+}
+function startPlan(plan) {
+  if (!plan || !plan.segs.length) { toast('这节课还没有环节'); return; }
+  if (timer.tick) { clearInterval(timer.tick); timer.tick = null; }
+  timer.plan = plan; timer.idx = 0; timer.left = plan.segs[0].min * 60;
+  timer.running = false;
+  go('coach');
+  setTimeout(() => { if (route === 'coach') { updateTimerDom(); toast('准备好了就点开始计时'); } }, 60);
+}
+function jumpSeg(i) {
+  if (!timer.plan) return;
+  if (i >= timer.plan.segs.length) { endSheet(); return; }
+  if (i < 0) { toast('已经是第一段'); return; }
+  if (timer.tick) { clearInterval(timer.tick); timer.tick = null; }
+  timer.idx = i; timer.running = false; timer.left = timer.plan.segs[i].min * 60;
+  render();
+}
+
+/* =====================================================================
+   视图：球队
+   ===================================================================== */
+RENDER.squad = function () {
+  const ps = state.players;
+  const rate = attendanceRate();
+  const avg = ps.length ? Math.round(ps.reduce((s, p) => s + (+p.age || 0), 0) / ps.length) : 0;
+  const cntA = ps.filter((p) => p.band === 'A').length, cntB = ps.filter((p) => p.band === 'B').length, cntC = ps.filter((p) => p.band === 'C').length;
+  return '' +
+  '<div class="sec" style="margin-top:0">' +
+    '<div class="card" style="padding:12px 8px">' +
+      '<div style="display:flex;align-items:center;text-align:center">' +
+        '<div style="flex:1;min-width:0"><div class="seg-p">在册球员</div><div class="num" style="font-size:22px;font-weight:600;color:var(--paper);line-height:1.4">' + ps.length + '<small style="font-size:12px;color:var(--dim)"> 人</small></div><div class="seg-d" style="margin:2px 0 0">平均 ' + avg + ' 岁</div></div>' +
+        '<div style="flex:1;min-width:0;border-left:1px solid var(--line)"><div class="seg-p">出勤率</div><div class="num" style="font-size:22px;font-weight:600;color:var(--paper);line-height:1.4">' + (rate === null ? '—' : rate + '<small style="font-size:12px;color:var(--dim)">%</small>') + '</div><div class="seg-d" style="margin:2px 0 0">按名单估算</div></div>' +
+        '<div style="flex:1;min-width:0;border-left:1px solid var(--line)"><div class="seg-p">分组</div><div style="font-size:13px;color:var(--paper);margin-top:4px;line-height:1.6">U6–8 ' + cntA + '<br>U9–11 ' + cntB + '<br>U12–15 ' + cntC + '</div></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>' +
+
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>名单</h2><span class="sub">' + ps.length + ' 人</span></div>' +
+    (ps.length ? '<div class="card" style="padding:8px 10px"><table class="tbl"><colgroup><col style="width:34%"><col style="width:16%"><col style="width:20%"><col style="width:18%"><col style="width:12%"></colgroup>' +
+      '<thead><tr><th>姓名</th><th>年龄</th><th>分组</th><th>出勤</th><th></th></tr></thead><tbody>' +
+      ps.map((p) => {
+        const played = state.sessions.filter((s) => (s.attendees || []).indexOf(p.id) >= 0).length;
+        const r = state.sessions.length ? Math.round(played / state.sessions.length * 100) + '%' : '—';
+        return '<tr><td>' + esc(p.n) + '</td><td class="num">' + (p.age || '—') + '</td><td>' + ageOf(p.band).n + '</td>' +
+          '<td class="num">' + r + '</td><td><button class="btn btn-s" style="min-height:44px;min-width:44px;padding:0 8px;color:var(--dim);border:1px solid var(--line)" data-act="del-player" data-arg="' + p.id + '">删</button></td></tr>';
+      }).join('') + '</tbody></table></div>'
+      : '<div class="empty">还没有球员，用下面的表单加人。</div>') +
+  '</div>' +
+
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>加一名球员</h2><span class="sub">6–15 岁</span></div>' +
+    '<form class="card" data-act="add-player">' +
+      '<div class="row" style="gap:8px;align-items:flex-end;flex-wrap:wrap">' +
+        '<div class="field" style="flex:2 1 130px;margin:0"><label>姓名</label><input name="name" required maxlength="12" placeholder="如：小宇"></div>' +
+        '<div class="field" style="flex:1 1 80px;margin:0"><label>年龄</label><input name="age" type="number" min="6" max="15" required placeholder="9"></div>' +
+        '<div class="field" style="flex:1 1 100px;margin:0"><label>位置</label><select name="pos"><option>后卫</option><option>前锋</option><option>中锋</option></select></div>' +
+      '</div>' +
+      '<div style="margin-top:10px"><button class="btn btn-p btn-block" type="submit">加入名单</button></div>' +
+    '</form>' +
+  '</div>' +
+
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>体测记录</h2><span class="sub">身高 / 体重 / 立定跳远</span></div>' +
+    '<form class="card" data-act="add-measure">' +
+      '<div class="row" style="gap:8px;flex-wrap:wrap;align-items:flex-end">' +
+        '<div class="field" style="flex:2 1 120px;margin:0"><label>球员</label><select name="pid">' +
+          (ps.length ? ps.map((p) => '<option value="' + p.id + '">' + esc(p.n) + '</option>').join('') : '<option value="">先加球员</option>') +
+        '</select></div>' +
+        '<div class="field" style="flex:1 1 80px;margin:0"><label>身高 cm</label><input name="height" type="number" min="90" max="210" step="0.5" placeholder="145"></div>' +
+        '<div class="field" style="flex:1 1 80px;margin:0"><label>体重 kg</label><input name="weight" type="number" min="15" max="110" step="0.5" placeholder="38"></div>' +
+        '<div class="field" style="flex:1 1 90px;margin:0"><label>立定跳远 cm</label><input name="jump" type="number" min="50" max="320" placeholder="170"></div>' +
+      '</div>' +
+      '<div style="margin-top:10px"><button class="btn btn-p btn-block" type="submit">记录一次</button></div>' +
+    '</form>' +
+    (state.measures.length
+      ? '<div class="card" style="margin-top:10px;padding:8px 10px"><table class="tbl"><colgroup><col style="width:30%"><col style="width:18%"><col style="width:18%"><col style="width:18%"><col style="width:16%"></colgroup>' +
+        '<thead><tr><th>球员</th><th>日期</th><th>身高</th><th>体重</th><th>跳远</th></tr></thead><tbody>' +
+        state.measures.slice(0, 8).map((m) => {
+          const p = ps.find((x) => x.id === m.pid);
+          return '<tr><td>' + esc(p ? p.n : '已删除') + '</td><td class="num">' + m.date.slice(5) + '</td>' +
+            '<td class="num">' + (m.height || '—') + '</td><td class="num">' + (m.weight || '—') + '</td><td class="num">' + (m.jump || '—') + '</td></tr>';
+        }).join('') + '</tbody></table></div>'
+      : '') +
+  '</div>' +
+
+  '<div class="sec"><div class="sec-h"><h2>今日出勤</h2><span class="sub">训练结束后自动写入记录</span></div>' +
+    '<div class="card"><div class="seg-d">今天的出勤在「执教 → 结束本节」时勾选，勾选后会计入出勤率与「全员到齐」徽章。</div></div></div>';
+};
+
+/* =====================================================================
+   视图：趣味
+   ===================================================================== */
+let wheelRot = 0;
+
+function wheelSvg() {
+  const items = FUN_CHALLENGES.slice(0, 8);
+  const step = 360 / items.length;
+  const c = 100, r = 94;
+  let paths = '', labels = '';
+  items.forEach((it, i) => {
+    const a1 = -90 + i * step, a2 = a1 + step;
+    const x1 = c + r * Math.cos(a1 * Math.PI / 180), y1 = c + r * Math.sin(a1 * Math.PI / 180);
+    const x2 = c + r * Math.cos(a2 * Math.PI / 180), y2 = c + r * Math.sin(a2 * Math.PI / 180);
+    const fill = i % 2 ? '#1E2620' : '#241A13';
+    paths += '<path d="M' + c + ',' + c + ' L' + x1.toFixed(2) + ',' + y1.toFixed(2) +
+      ' A' + r + ',' + r + ' 0 0 1 ' + x2.toFixed(2) + ',' + y2.toFixed(2) + ' Z" fill="' + fill + '" stroke="#3A453C" stroke-width="1"/>';
+    const mid = a1 + step / 2;
+    const tx = c + (r * 0.6) * Math.cos(mid * Math.PI / 180), ty = c + (r * 0.6) * Math.sin(mid * Math.PI / 180);
+    const txt = it.s || it.t.slice(0, 4);
+    const rot = (mid > 90 && mid < 270) ? mid + 180 : mid;
+    labels += '<text x="' + tx.toFixed(1) + '" y="' + ty.toFixed(1) + '" fill="#E9E2D4" font-size="10" text-anchor="middle" dominant-baseline="middle" transform="rotate(' + rot.toFixed(1) + ' ' + tx.toFixed(1) + ',' + ty.toFixed(1) + ')">' + esc(txt) + '</text>';
+  });
+  return '<svg viewBox="0 0 200 200" width="100%" height="100%">' + paths + labels +
+    '<circle cx="100" cy="100" r="16" fill="#E4551D"/><circle cx="100" cy="100" r="6" fill="#0E1210"/></svg>';
+}
+
+RENDER.fun = function () {
+  const b = badgeState();
+  return '' +
+  '<div class="sec" style="margin-top:0">' +
+    '<div class="sec-h"><h2>幸运转盘</h2><span class="sub">已转 ' + state.flags.wheel + ' 次</span></div>' +
+    '<div class="card"><div class="wheel-w"><div class="needle"></div><div class="wheel" id="wheel" style="transform:rotate(' + wheelRot + 'deg)">' + wheelSvg() + '</div></div>' +
+      '<div class="row" style="gap:8px;margin-top:14px"><button class="btn btn-p" style="flex:1" data-act="wheel-spin">转一下</button>' +
+        '<button class="btn btn-g" data-act="wheel-reset">归零</button></div>' +
+      '<div id="wheelOut" class="empty" style="margin-top:10px">抽一个小挑战，孩子立刻集中注意力。</div>' +
+    '</div>' +
+  '</div>' +
+
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>分队计分板</h2><span class="sub">训练中的小比赛用</span></div>' +
+    '<div class="score">' +
+      '<div class="score-b red"><div class="seg-p">红队</div><div class="score-v num" id="scoreRed">' + state.team.red + '</div>' +
+        '<div class="score-btns"><button data-act="score" data-arg="red" data-arg2="1">+1</button>' +
+        '<button data-act="score" data-arg="red" data-arg2="2">+2</button>' +
+        '<button data-act="score" data-arg="red" data-arg2="3">+3</button></div></div>' +
+      '<div class="score-b blue"><div class="seg-p">蓝队</div><div class="score-v num" id="scoreBlue">' + state.team.blue + '</div>' +
+        '<div class="score-btns"><button data-act="score" data-arg="blue" data-arg2="1">+1</button>' +
+        '<button data-act="score" data-arg="blue" data-arg2="2">+2</button>' +
+        '<button data-act="score" data-arg="blue" data-arg2="3">+3</button></div></div>' +
+    '</div>' +
+    '<div class="row between" style="margin-top:10px"><div class="seg-d" id="scoreLead">' + leadText() + '</div>' +
+      '<button class="btn btn-g btn-s" data-act="score-reset">清零</button></div>' +
+  '</div>' +
+
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>徽章墙</h2><span class="sub">' + Object.values(b).filter(Boolean).length + ' / ' + BADGES.length + '</span></div>' +
+    '<div class="badges">' + BADGES.map((x) =>
+      '<div class="badge ' + (b[x.id] ? 'on' : '') + '">' + badgeIcon(x.id) + '<b>' + x.n + '</b><span>' + x.d + '</span></div>').join('') + '</div>' +
+  '</div>' +
+
+  '<div class="sec"><div class="sec-h"><h2>更多小游戏</h2><span class="sub">不用器材也能玩</span></div>' +
+    '<div class="list">' + FUN_CHALLENGES.slice(0, 10).map((c, i) =>
+      '<div class="card"><div class="row between"><div style="min-width:0"><div style="font-weight:700">' + esc(c.t) + '</div>' +
+      '<div class="seg-d">' + esc(c.d) + '</div></div><div class="drill-idx num" style="width:34px;height:34px">' + (i + 1) + '</div></div></div>').join('') + '</div></div>';
+};
+
+function leadText() {
+  const r = state.team.red, bl = state.team.blue;
+  if (r === bl) return r === 0 ? '还没开分' : '打平 · ' + r + ' : ' + bl;
+  return (r > bl ? '红队领先 ' : '蓝队领先 ') + Math.abs(r - bl) + ' 分';
+}
+function badgeIcon(id) {
+  const m = {
+    first: 'M12 3l2.6 5.4 5.9.8-4.3 4.2 1 5.9-5.2-2.8-5.2 2.8 1-5.9L4.5 9.2l5.9-.8z',
+    ten: 'M4 6h16v4H4zM6 10h12v9H6z',
+    streak: 'M13 3L5 14h6l-1 7 8-11H7z',
+    min300: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2',
+    perfect: 'M4 12l5 5L20 6',
+    wheel: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 3v9l6 4'
+  };
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="' + m[id] + '"/></svg>';
+}
+
+/* =====================================================================
+   视图：数据
+   ===================================================================== */
+RENDER.stats = function () {
+  const w = weekDates();
+  const ws = weekSessions();
+  const wMin = ws.reduce((s, x) => s + x.minutes, 0);
+  const maxMin = Math.max(30, ...w.map((d) => state.sessions.filter((s) => s.date === d).reduce((a, b) => a + b.minutes, 0)));
+  const per = w.map((d) => state.sessions.filter((s) => s.date === d).reduce((a, b) => a + b.minutes, 0));
+  const rate = attendanceRate();
+  const b = badgeState();
+  const recent = state.sessions.slice(0, 10);
+  return '' +
+  '<div class="sec" style="margin-top:0">' +
+    '<div class="grid g2">' +
+      '<div class="card"><div class="seg-p">本周训练</div><div class="seg-t num">' + ws.length + '<small>次</small></div><div class="seg-d">合计 ' + wMin + ' 分钟</div></div>' +
+      '<div class="card"><div class="seg-p">累计训练</div><div class="seg-t num">' + state.sessions.length + '<small>次</small></div><div class="seg-d">' + totalMinutes() + ' 分钟</div></div>' +
+      '<div class="card"><div class="seg-p">出勤率</div><div class="seg-t num">' + (rate === null ? '—' : rate + '<small>%</small>') + '</div><div class="seg-d">' + state.players.length + ' 人在册</div></div>' +
+      '<div class="card"><div class="seg-p">连续训练</div><div class="seg-t num">' + streakDays() + '<small>天</small></div><div class="seg-d">断一天就归零</div></div>' +
+    '</div>' +
+  '</div>' +
+
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>本周每日时长</h2><span class="sub">分钟</span></div>' +
+    '<div class="card"><div class="bars">' + w.map((d, i) =>
+      '<div class="b"><div class="v ' + (per[i] ? '' : 'zero') + '" style="height:' + Math.round(per[i] / maxMin * 100) + '%"></div>' +
+      '<div class="l">' + WD[(new Date(d + 'T00:00:00')).getDay()].slice(1) + '</div></div>').join('') + '</div>' +
+      '<div class="seg-d" style="margin-top:8px">' + (wMin ? '本周共 ' + wMin + ' 分钟，最高一天 ' + Math.max(...per) + ' 分钟。' : '本周还没有记录，带一节课就有了。') + '</div>' +
+    '</div>' +
+  '</div>' +
+
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>训练记录</h2><span class="sub">最近 ' + recent.length + ' 次</span></div>' +
+    (recent.length ? '<div class="card" style="padding:8px 10px"><table class="tbl"><colgroup><col style="width:24%"><col style="width:40%"><col style="width:14%"><col style="width:12%"><col style="width:10%"></colgroup>' +
+      '<thead><tr><th>日期</th><th>教案</th><th>分钟</th><th>出勤</th><th></th></tr></thead><tbody>' +
+      recent.map((s) => '<tr><td class="num">' + s.date.slice(5).replace('-', '/') + '</td><td>' + esc(s.title) + '</td>' +
+        '<td class="num">' + s.minutes + '</td><td class="num">' + (s.attendees || []).length + '</td>' +
+        '<td><button class="btn btn-s" style="min-height:30px;padding:0 7px;border:1px solid var(--line);color:var(--dim)" data-act="del-session" data-arg="' + s.id + '">删</button></td></tr>').join('') +
+      '</tbody></table></div>'
+      : '<div class="empty">还没有训练记录。到「执教」带一节课，结束后会自动记一条。</div>') +
+  '</div>' +
+
+  '<div class="sec">' +
+    '<div class="sec-h"><h2>徽章进度</h2><span class="sub">' + Object.values(b).filter(Boolean).length + ' / ' + BADGES.length + ' 已解锁</span></div>' +
+    '<div class="grid g2">' + BADGES.map((x) => {
+      const done = b[x.id];
+      const pr = x.id === 'ten' ? Math.min(100, state.sessions.length * 10)
+        : x.id === 'min300' ? Math.min(100, Math.round(totalMinutes() / 3))
+        : x.id === 'streak' ? Math.min(100, Math.round(streakDays() / 3 * 100))
+        : x.id === 'wheel' ? Math.min(100, state.flags.wheel * 20) : (done ? 100 : 0);
+      return '<div class="card"><div class="row between"><div style="font-weight:600;font-size:13.5px">' + x.n + '</div>' +
+        '<div class="seg-p num">' + pr + '%</div></div>' +
+        '<div class="progress" style="margin-top:8px"><i style="width:' + pr + '%"></i></div>' +
+        '<div class="seg-d" style="margin-top:6px">' + x.d + '</div></div>';
+    }).join('') + '</div>' +
+  '</div>';
+};
+
+/* =====================================================================
+   视图：说明
+   ===================================================================== */
+RENDER.doc = function () {
+  return '<div class="sec doc" style="margin-top:0">' +
+    '<div class="sec-h"><h2>怎么用</h2><span class="sub">3 分钟上手</span></div>' +
+    '<div class="card">' +
+    '<p><b>1. 备课。</b>选年龄段、课时长度、主题，点「生成这节课」。系统按热身 → 技术 → 趣味挑战 → 对抗 → 放松排好分钟；不满意可以换一套，也可以单独给某段加减 2 分钟、换掉某个动作。</p>' +
+    '<p><b>2. 执教。</b>到球场点「按这节开始带」，进入计时器模式。每段显示剩余时间、动作名称和教练要点；时间到会响一声提醒。孩子练完一段就跳下一段。</p>' +
+    '<p><b>3. 结束记录。</b>点「结束本节」，勾当天到场的人，点保存。出勤、时长、连续天数、徽章都会自动更新。</p>' +
+    '<p><b>4. 趣味。</b>注意力散了就开「趣味」：转盘抽小挑战，或用分队计分板做小比赛。6–8 岁建议每 5 分钟换一次形式。</p>' +
+    '<p><b>5. 数据。</b>「数据」里看本周时长、出勤率、徽章进度，判断该加量还是该减量。</p>' +
+    '</div>' +
+
+    '<div class="sec-h" style="margin-top:22px"><h2>训练内容体系</h2><span class="sub">' + DRILLS.length + ' 个动作</span></div>' +
+    '<div class="card"><p>按 6–15 岁分成三段，每段动作、球号、篮筐高度都不同：</p>' +
+    '<ul>' + AGES.map((a) => '<li><b>' + a.n + '（' + a.t + '）：</b>' + a.ball + '。' + a.tip + '</li>').join('') + '</ul>' +
+    '<p style="margin-top:10px">动作分六类：' + CATS.map((c) => c.n).join('、') + '。每个动作都有目标、组织方式、器材、做法步骤、教练要点、进阶/降阶和趣味化玩法，点训练库里的任意一条就能看到全部细节。</p>' +
+    '</div>' +
+
+    '<div class="sec-h" style="margin-top:22px"><h2>对照 ESC Coach</h2><span class="sub">能搬什么、搬不了什么</span></div>' +
+    '<div class="card">' +
+    '<p>ESC Coach（足球教练备课工作台）前端是 Vue 3 + Element Plus 的后台脚手架，约 30 个增删改查页面；真正值钱的是服务端、会员订单、内容库和账号体系。</p>' +
+    '<p><b>可以零成本搬的：</b>页面骨架、教案生成逻辑、动作库结构、打印教案。这个工具就是照这套思路重做的篮球版。</p>' +
+    '<p><b>搬不了的：</b>多账号登录、云端同步、会员收费、内容远程下发——这些都要服务器和备案，不存在零成本方案。本工具的替代做法是把数据放在你自己的浏览器里，一分钱不花。</p>' +
+    '<p style="margin-top:8px">想升级成微信小程序，需要另外注册主体、备案并接后端；现在这份单文件网页可以先用手机浏览器打开，效果接近。</p>' +
+    '</div>' +
+
+    '<div class="sec-h" style="margin-top:22px"><h2>关于这个工具</h2><span class="sub">说清楚边界</span></div>' +    '<div class="card">' +
+    '<p>这是一个<b>单文件网页应用</b>：双击就能用，断网也能用，数据存在你这台设备的浏览器本地（localStorage），不会上传到任何服务器。</p>' +
+    '<p><b>这意味着：</b>换设备、换浏览器、清理浏览器数据，记录会丢。重要教案请定期用「打印」存成 PDF，球员名单可以手动备份。</p>' +
+    '<p><b>它还没有的：</b>多教练协作、云端同步、微信小程序端、账号登录、微信支付。这些需要后端和服务器，单文件网页做不到，需要另外搭。</p>' +
+    '<p style="margin-top:10px"><b>打印教案：</b>在「备课」或首页点「打印」，浏览器会弹出打印窗口，选「另存为 PDF」就能存成一份可发给家长的教案。</p>' +
+    '</div>' +
+
+    '<div class="sec-h" style="margin-top:22px"><h2>数据重置</h2><span class="sub">谨慎操作</span></div>' +
+    '<div class="card"><div class="row between"><div style="min-width:0"><div style="font-weight:600">清空全部本地数据</div>' +
+      '<div class="seg-d">教案、训练记录、球员、体测都会删除，无法恢复。</div></div>' +
+      '<button class="btn btn-g btn-s" data-act="reset-all">清空</button></div></div>' +
+    '<div style="height:16px"></div>' +
+  '</div>';
+};
+
+/* =====================================================================
+   教案打印
+   ===================================================================== */
+function printable(plan) {
+  if (!plan) return '<div class="empty">没有这节课</div>';
+  return '<div style="padding:8px 0">' +
+    '<div style="font-size:11px;letter-spacing:.2em;color:#666">小篮球训练台 · 训练教案</div>' +
+    '<h1 style="font-size:24px;margin:6px 0 4px">' + esc(plan.title) + '</h1>' +
+    '<div style="font-size:12px;color:#555">' + ageOf(plan.band).n + '（' + ageOf(plan.band).t + '） · ' +
+      THEMES.find((t) => t.id === plan.theme).n + ' · 共 ' + plan.minutes + ' 分钟 · 生成于 ' + esc(plan.createdAt) + '</div>' +
+    '<div style="margin:10px 0;padding:8px 10px;border:1px solid #ccc;font-size:12px">器材与设置：' + ageOf(plan.band).ball + '</div>' +
+    '<table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed">' +
+      '<colgroup><col style="width:12%"><col style="width:8%"><col style="width:24%"><col style="width:56%"></colgroup>' +
+      '<thead><tr style="background:#eee"><th style="text-align:left;padding:6px;border:1px solid #ccc">环节</th>' +
+      '<th style="text-align:left;padding:6px;border:1px solid #ccc">分钟</th>' +
+      '<th style="text-align:left;padding:6px;border:1px solid #ccc">动作</th>' +
+      '<th style="text-align:left;padding:6px;border:1px solid #ccc">组织与教练要点</th></tr></thead><tbody>' +
+      plan.segs.map((s) => {
+        const d = drillOf(s.drillId) || {n: '—', setup: '', points: []};
+        return '<tr><td style="padding:6px;border:1px solid #ccc">' + phaseOf(s.phase).n + '</td>' +
+          '<td style="padding:6px;border:1px solid #ccc">' + s.min + '</td>' +
+          '<td style="padding:6px;border:1px solid #ccc"><b>' + esc(d.n) + '</b><br><span style="color:#666">' + esc(d.players || '') + '</span></td>' +
+          '<td style="padding:6px;border:1px solid #ccc">' + esc(d.setup || '') + '<br>' + (d.points || []).map((p) => '· ' + esc(p)).join('<br>') + '</td></tr>';
+      }).join('') +
+      '</tbody></table>' +
+    '<div style="margin-top:10px;font-size:12px;color:#444"><b>课后复盘：</b>哪一段最顺？哪一段孩子走神？下节课改一处就行。</div>' +
+  '</div>';
+}
+function printPlan(plan) {
+  if (!plan) { toast('没有可打印的教案'); return; }
+  $('#view-plan-print').innerHTML = printable(plan);
+  setTimeout(() => { window.print(); }, 80);
+}
+
+/* =====================================================================
+   弹层
+   ===================================================================== */
+function openSheet(html) {
+  const s = $('#sheet');
+  s.innerHTML = html;
+  s.classList.add('on');
+  $('#sheetBg').classList.add('on');
+}
+function closeSheet() {
+  $('#sheet').classList.remove('on');
+  $('#sheetBg').classList.remove('on');
+}
+
+/* =====================================================================
+   交互
+   ===================================================================== */
+function handle(act, arg, el, fd) {
+  const b = ui.build;
+  switch (act) {
+    case 'go': go(arg); break;
+    case 'quick-gen':
+      state.draft = genPlan(b.band, 60, b.theme);
+      go('build'); toast('已生成一节 60 分钟课，可微调'); break;
+    case 'set-band': b.band = arg; render(); break;
+    case 'set-min': b.minutes = +arg; render(); break;
+    case 'set-theme': b.theme = arg; render(); break;
+    case 'gen':
+      state.draft = genPlan(b.band, b.minutes, b.theme);
+      render(); toast('已生成，共 ' + state.draft.segs.length + ' 个环节'); break;
+    case 'draft-save': {
+      const d = state.draft;
+      d.id = uid(); d.createdAt = TODAY;
+      state.plans.unshift(d);
+      state.draft = null;
+      save(); render(); toast('教案已保存'); break;
+    }
+    case 'draft-print': printPlan(state.draft); break;
+    case 'draft-coach': startPlan(state.draft); break;
+    case 'plan-print': printPlan(planById(arg)); break;
+    case 'plan-del': {
+      if (!confirm('删除这份教案？')) return;
+      state.plans = state.plans.filter((p) => p.id !== arg); save(); render(); toast('已删除'); break;
+    }
+    case 'seg-plus': case 'seg-minus': {
+      const i = +arg; const s = state.draft.segs[i];
+      if (!s) break;
+      const delta = act === 'seg-plus' ? 2 : -2;
+      const next = s.min + delta;
+      if (next < 3) { toast('每段至少 3 分钟'); break; }
+      s.min = next;
+      state.draft.minutes += delta;
+      render(); break;
+    }
+    case 'seg-del': {
+      if (state.draft.segs.length <= 1) { toast('至少要留一个环节'); break; }
+      const i = +arg; state.draft.minutes -= state.draft.segs[i].min;
+      state.draft.segs.splice(i, 1); render(); break;
+    }
+    case 'seg-swap': {
+      const i = +arg; const seg = state.draft.segs[i];
+      const pool = DRILLS.filter((d) => d.ages.indexOf(state.draft.band) >= 0 && d.phases.indexOf(seg.phase) >= 0 && d.id !== seg.drillId);
+      if (!pool.length) { toast('这个环节没有别的动作了'); break; }
+      seg.drillId = pool[Math.floor(Math.random() * pool.length)].id;
+      render(); toast('已换一个动作'); break;
+    }
+    case 'drill': drillSheet(arg); break;
+    case 'drill-add': {
+      const d = drillOf(arg);
+      if (!state.draft) { state.draft = genPlan(b.band, b.minutes, b.theme); }
+      const ph = d.phases[0];
+      state.draft.segs.push({phase: ph, drillId: d.id, min: d.min});
+      state.draft.minutes += d.min;
+      closeSheet(); toast('已加入，去备课页看看'); break;
+    }
+    case 'lib-band': ui.libBand = arg; render(); break;
+    case 'lib-cat': ui.libCat = arg; render(); break;
+    case 'coach-start':
+      if (arg === 'draft') startPlan(state.draft); else startPlan(planById(arg));
+      break;
+    case 'timer-toggle':
+      if (!timer.plan) break;
+      timer.running = !timer.running;
+      if (timer.running) { beep(); startTick(); } else if (timer.tick) { clearInterval(timer.tick); timer.tick = null; }
+      render(); break;
+    case 'timer-next': jumpSeg(timer.idx + 1); break;
+    case 'timer-prev': jumpSeg(timer.idx - 1); break;
+    case 'timer-jump': jumpSeg(+arg); break;
+    case 'timer-exit': endSheet(); break;
+    case 'wheel-spin': spinWheel(); break;
+    case 'wheel-reset': wheelRot = 0; state.flags.wheel = 0; save(); render(); break;
+    case 'score': {
+      const k = arg; state.team[k] += +el.dataset.arg2;
+      save();
+      $('#scoreRed').textContent = state.team.red;
+      $('#scoreBlue').textContent = state.team.blue;
+      $('#scoreLead').textContent = leadText();
+      break;
+    }
+    case 'score-reset': state.team.red = 0; state.team.blue = 0; save(); render(); toast('比分已清零'); break;
+    case 'add-player': {
+      const name = (fd.get('name') || '').toString().trim();
+      const age = parseInt(fd.get('age'), 10);
+      if (!name || !age) { toast('姓名和年龄都要填'); break; }
+      const band = age <= 8 ? 'A' : age <= 11 ? 'B' : 'C';
+      state.players.push({id: uid(), n: name, age: age, band: band, pos: fd.get('pos')});
+      save(); render(); toast('已加入 ' + name); break;
+    }
+    case 'del-player': {
+      const p = state.players.find((x) => x.id === arg);
+      if (!p || !confirm('删除球员「' + p.n + '」？历史出勤记录不会连带删除。')) return;
+      state.players = state.players.filter((x) => x.id !== arg); save(); render(); break;
+    }
+    case 'add-measure': {
+      const pid = fd.get('pid');
+      if (!pid) { toast('先加一名球员'); break; }
+      state.measures.unshift({
+        id: uid(), pid: pid, date: TODAY,
+        height: fd.get('height') || '', weight: fd.get('weight') || '', jump: fd.get('jump') || ''
+      });
+      save(); render(); toast('已记录'); break;
+    }
+    case 'end-save': {
+      const checks = $$('input[name="att"]:checked');
+      const ids = checks.map((c) => c.value);
+      state.sessions.unshift({
+        id: uid(), title: timer.plan.title, band: timer.plan.band,
+        minutes: timer.plan.minutes, date: TODAY, attendees: ids, planId: timer.plan.id
+      });
+      save(); closeSheet();
+      timer.plan = null; timer.idx = 0; timer.left = 0; timer.running = false;
+      if (timer.tick) { clearInterval(timer.tick); timer.tick = null; }
+      go('stats'); toast('训练已记录：' + ids.length + ' 人出勤');
+      break;
+    }
+    case 'del-session': {
+      if (!confirm('删除这条训练记录？')) return;
+      state.sessions = state.sessions.filter((s) => s.id !== arg); save(); render(); break;
+    }
+    case 'reset-all': {
+      if (!confirm('清空全部数据？教案、记录、球员都会删除，无法恢复。')) return;
+      if (!confirm('再确认一次：真的要全部清空？')) return;
+      localStorage.removeItem(LS_KEY);
+      state.plans = []; state.sessions = []; state.players = []; state.measures = [];
+      state.flags = {wheel: 0}; state.team = {red: 0, blue: 0}; state.draft = null;
+      save(); go('home'); toast('已清空'); break;
+    }
+    case 'close-sheet': closeSheet(); break;
+    default: break;
+  }
+}
+
+function endSheet() {
+  if (!timer.plan) return;
+  const ps = state.players;
+  openSheet('<div class="sheet-h"><div><div class="seg-p">结束本节</div><div class="sheet-t">' + esc(timer.plan.title) + '</div></div>' +
+    '<button class="close" data-act="close-sheet" aria-label="关闭">✕</button></div>' +
+    '<div class="seg-d">共 ' + timer.plan.minutes + ' 分钟。勾出勤，保存后会记入数据。</div>' +
+    (ps.length ? '<div class="list" style="margin-top:12px">' + ps.map((p) =>
+      '<label class="row" style="gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;min-height:44px">' +
+        '<input type="checkbox" name="att" value="' + p.id + '" checked style="width:20px;height:20px;min-height:20px;flex:0 0 20px">' +
+        '<span style="flex:1">' + esc(p.n) + '</span><span class="seg-p">' + ageOf(p.band).n + '</span></label>').join('') + '</div>'
+      : '<div class="empty" style="margin-top:12px">名单里还没有球员，可以先保存记录，之后到「球队」加人。</div>') +
+    '<div style="margin-top:14px"><button class="btn btn-p btn-block" data-act="end-save">保存训练记录</button></div>');
+}
+
+function spinWheel() {
+  const items = FUN_CHALLENGES.slice(0, 8);
+  const step = 360 / items.length;
+  const idx = Math.floor(Math.random() * items.length);
+  const target = (270 - (idx * step + step / 2) + 360) % 360;
+  const cur = ((wheelRot % 360) + 360) % 360;
+  const delta = ((target - cur) + 360) % 360;
+  wheelRot += 360 * 5 + delta;
+  const w = $('#wheel');
+  if (!w) return;
+  w.style.transform = 'rotate(' + wheelRot + 'deg)';
+  state.flags.wheel++;
+  save();
+  $('#wheelOut').className = 'empty';
+  $('#wheelOut').textContent = '转盘转起来了…';
+  setTimeout(() => {
+    const c = items[idx];
+    const out = $('#wheelOut');
+    if (out) {
+      out.className = 'card';
+      out.style.marginTop = '10px';
+      out.innerHTML = '<div class="seg-p">这轮抽到</div><div style="font-weight:800;font-size:17px;margin:4px 0 6px">' + esc(c.t) + '</div>' +
+        '<div class="seg-d">' + esc(c.d) + '</div>';
+    }
+    beep();
+  }, 2650);
+}
+
+/* =====================================================================
+   启动
+   ===================================================================== */
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-act]');
+  if (!el) {
+    if (e.target.id === 'sheetBg') closeSheet();
+    return;
+  }
+  if (el.tagName === 'FORM') return;
+  e.preventDefault();
+  handle(el.dataset.act, el.dataset.arg, el);
+});
+document.addEventListener('submit', (e) => {
+  const f = e.target.closest('form[data-act]');
+  if (!f) return;
+  e.preventDefault();
+  handle(f.dataset.act, '', f, new FormData(f));
+});
+window.addEventListener('hashchange', render);
+
+(function init() {
+  load();
+  document.body.insertAdjacentHTML('beforeend', '<div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>');
+  if (!location.hash) location.hash = '#/home';
+  render();
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>
