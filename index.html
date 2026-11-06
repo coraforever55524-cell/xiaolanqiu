@@ -96,7 +96,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--ball);outline-of
 .magnet i{width:7px;height:7px;border-radius:2px;background:var(--ball)}
 
 /* 按钮 */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border-radius:12px;font-weight:600;font-size:15px;border:1px solid transparent;transition:transform .12s ease, background .2s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border-radius:12px;font-weight:600;font-size:15px;border:1px solid transparent;white-space:nowrap;transition:transform .12s ease, background .2s}
 .btn:active{transform:translateY(1px)}
 .btn-p{background:var(--ball);color:#170A04}
 .btn-p:hover{background:var(--ball2)}
@@ -216,6 +216,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--ball);outline-of
 .field{display:grid;gap:5px;margin:10px 0}
 .field label{font-size:11.5px;letter-spacing:.08em;color:var(--muted)}
 .field select,.field input,.field textarea{width:100%}
+.ck{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;color:var(--paper);min-height:34px}
+.ck input{appearance:none;-webkit-appearance:none;width:19px;height:19px;min-height:0;margin:0;position:relative;
+  border:1.5px solid var(--line2);border-radius:5px;background:var(--ink2)}
+.ck input:checked{background:var(--ball);border-color:var(--ball)}
+.ck input:checked::after{content:"";position:absolute;left:5px;top:1px;width:6px;height:11px;
+  border-right:2.4px solid #1A0D06;border-bottom:2.4px solid #1A0D06;transform:rotate(42deg)}
 
 /* 说明页 */
 .doc h3{font-size:15px;margin:20px 0 8px}
@@ -584,7 +590,63 @@ const DRILLS = [
  steps:['大腿前后侧、小腿各拉伸 20 秒，左右都做','深呼吸 5 次：吸气 3 秒、呼气 5 秒','肩绕环前后各 10 次'],
  points:['拉伸保持不动，不要弹震','呼吸慢而长，不要憋气','出现疼痛立刻停，不硬压'],
  up:'有泡沫轴时加入滚压', down:'只做呼吸与肩绕环', fun:'“最安静的一分钟”：全队不出声完成呼吸练习',
- phases:['cool']}
+ phases:['cool']},
+
+{id:'d36', n:'抢球大战', cat:'game', ages:['A','B'], min:10, players:'6–20 人', space:'半场', gear:['球 4 个（少于人数）','标志盘 4 个'],
+ goal:'在争抢中护住球，学会用身体把球和别人隔开', setup:'半场四角各放一个标志盘当“家”，球散在中间，人数比球多 2–4 个',
+ steps:['哨响后全家冲去中间拿球，拿到球的人运球往自己角走','球在自己手里最多 8 秒，超过就放回中间重新抢','被抢走球的人立刻去抢别人的，不许站在原地'],
+ points:['护球时球放远侧，屁股顶住对手','运球时不看球，看哪里有空位','被抢了先回防，不追着人喊'],
+ up:'球减少到 2 个，难度提高', down:'改成“拿到球站着不动就算安全”', fun:'剩最后两个人持球时全队为他们数秒，像决赛一样',
+ phases:['warm','game','match']},
+
+{id:'d37', n:'传球接力赛', cat:'pass', ages:['A','B','C'], min:12, players:'8–24 人', space:'全场', gear:['球 2–4 个','标志桶 6 个'],
+ goal:'在跑动中稳定接球，出手快、接球稳', setup:'分 3 组，每组一条直线通道，桶当检查点，最后一人投篮结束',
+ steps:['两人一球面对面跑动传接，到桶换向','到终点给教练传一次，再投一次篮','计时 3 轮，取最快一轮比名次'],
+ points:['接球时手先伸出去迎球，不是等球到手','传球出手快、线路平','跑动中传球要传到胸前位置'],
+ up:'加“传球不许落地”的限制', down:'改成原地传接，距离缩短到 3 米', fun:'记分板挂在墙上，每轮报一次名次，最后一名下一轮先跑',
+ phases:['warm','game','tech']},
+
+{id:'d38', n:'五点投准挑战', cat:'shoot', ages:['B','C'], min:12, players:'全体', space:'半场', gear:['球 2–4 个','标志盘 5 个'],
+ goal:'在不同位置保持投篮动作一致，练命中率也练心态', setup:'篮下 5 个点摆标志盘（两侧零度、两个 45 度、正面），每人一个点投 2 次',
+ steps:['按顺序走点，每点投 2 球，进 1 球记 1 分','全组累计到 10 分，点位后移一步再进一轮','最后 3 分钟“关键球”：每人一次，全队一起数数'],
+ points:['每次投篮前先拍一下球调整节奏','脚、肩、手一条线，落地后不要后仰','投不进立刻回位，站在原地懊恼最浪费时间'],
+ up:'点位后移到三分线内一步', down:'点位前移到篮下 1 米', fun:'每进一球全队喊一次分数，把命中变成集体事件',
+ phases:['game','tech','match']},
+
+{id:'d39', n:'影子运球', cat:'handle', ages:['A','B'], min:10, players:'6–20 人', space:'半场', gear:['球人手一个'],
+ goal:'学会观察并复制别人的动作，提高模仿与协调', setup:'两人一组，一人当“领队”做动作，另一人当“影子”跟着做，30 秒换',
+ steps:['领队只能做运球类动作：高低、绕身、变向','影子必须同步跟上，掉球不算输，跟错才换','最后 2 分钟领队可以加速，影子跟不住的做 3 个开合跳'],
+ points:['影子先看脚下和手，再看球','领队不要做自己都做不稳的动作','换人时互相说一句“你哪个动作最好”'],
+ up:'加入换手运球与后退运球', down:'只做原地高低运球两个动作', fun:'全场评选“最像影子”，由对手投票',
+ phases:['warm','game','tech']},
+
+{id:'d40', n:'音乐运球', cat:'handle', ages:['A','B'], min:10, players:'全体', space:'半场', gear:['球人手一个','音响或哨'],
+ goal:'用声音信号练反应，把枯燥的运球变成节奏游戏', setup:'放音乐，队员自由运球；音乐一停立刻停球并做护球姿势',
+ steps:['音乐响时随意运球移动；音乐停时定住不动 3 秒','连续 3 次没被“抓”到，升级为领舞，可指定一个动作','最后一段音乐停时必须做出“三威胁”姿势'],
+ points:['停球要稳，球贴腰侧不滚走','眼睛抬起来看教练手势','动作幅度大一点，别在原地小碎步'],
+ up:'音乐停时要求换手 + 转身护球', down:'音乐停只要求抱住球蹲下', fun:'谁定住的姿势最像海报，全队鼓掌通过',
+ phases:['warm','game']},
+
+{id:'d41', n:'迷你三对三', cat:'game', ages:['B','C'], min:16, players:'6–12 人', space:'半场', gear:['球 1 个','标志盘'],
+ goal:'把当天练的技术放进真实对抗，学会跑位和分享球', setup:'半场三对三，每场 4 分钟或先到 5 分，输的一方下场换队',
+ steps:['开场先讲一条规则，比如“进球前必须传一次”','每场结束用 30 秒复盘：刚才哪个空位没传','轮换时让每个孩子都当一次发球人'],
+ points:['没有球的人要动，不要站着看','防守先退半步，别贴太紧被一步过','进球后立刻回防，不庆祝太久'],
+ up:'加“24 秒内必须出手”的节奏限制', down:'改成半场只许传球不许运球', fun:'设“最佳传球奖”，被队友举手选出来的人加一颗星',
+ phases:['game','match']},
+
+{id:'d42', n:'数字抱团', cat:'phys', ages:['A','B','C'], min:8, players:'8–24 人', space:'半场', gear:['无需器材'],
+ goal:'提高启动速度与反应，练听指令、快速找人', setup:'队员在半场慢跑，教练随机喊数字，喊到几就几个人抱团',
+ steps:['喊“3”就 3 人一组手拉手蹲下','没组到的人做 5 个开合跳再回场','最后 2 轮改成抱团后立刻做 3 次原地高抬腿'],
+ points:['听清数字再动，不要提前猜','找人时先看最近的空位','抱团后立刻蹲下，避免撞人'],
+ up:'喊数字同时加一个动作指令，如“4 人 + 单脚站”', down:'只喊 2 和 3，速度放慢', fun:'连续 3 轮都组到的人获得“反应王”称号',
+ phases:['warm','game']},
+
+{id:'d43', n:'障碍闯关接力', cat:'game', ages:['A','B','C'], min:14, players:'8–24 人', space:'全场', gear:['球 2–4 个','标志桶 8 个','标志盘 6 个'],
+ goal:'把运球、绕障、传球、投篮串成一条线，练完整技术链与团队配合', setup:'全场摆 4 关：绕桶运球 → 传球命中目标 → 折返跑 → 上篮；分 3 组接力',
+ steps:['第一关绕 4 个桶，不许碰桶，碰一次加 3 秒','第二关和队友对传 3 次，球不许落地','第三关底线折返，第四关一次上篮，不进补一次'],
+ points:['交接要拍手，不许抢跑','每关失败只加时间，不罚体能','各组自己安排谁跑哪一关'],
+ up:'增加第 5 关：罚球线投一次', down:'减少到两关，距离缩短', fun:'把每组时间写在白板上，破纪录的组可以决定下节课的热身游戏',
+ phases:['warm','game','match']}
 ];
 
 const FUN_CHALLENGES = [
@@ -642,7 +704,7 @@ const WD = ['周日','周一','周二','周三','周四','周五','周六'];
 const dateCn = (s) => { const d = new Date(s + 'T00:00:00'); return (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + WD[d.getDay()]; };
 
 const state = {
-  plans: [], sessions: [], players: [], measures: [],
+  plans: [], sessions: [], players: [], measures: [], cust: [],
   flags: {wheel: 0}, team: {red: 0, blue: 0},
   draft: null
 };
@@ -653,7 +715,7 @@ function load() {
     const raw = localStorage.getItem(LS_KEY);
     if (raw) {
       const o = JSON.parse(raw);
-      ['plans','sessions','players','measures'].forEach((k) => { if (Array.isArray(o[k])) state[k] = o[k]; });
+      ['plans','sessions','players','measures','cust'].forEach((k) => { if (Array.isArray(o[k])) state[k] = o[k]; });
       if (o.flags) state.flags = Object.assign(state.flags, o.flags);
       if (o.team) state.team = Object.assign(state.team, o.team);
     } else {
@@ -665,11 +727,12 @@ function save() {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify({
       plans: state.plans, sessions: state.sessions, players: state.players,
-      measures: state.measures, flags: state.flags, team: state.team
+      measures: state.measures, cust: state.cust, flags: state.flags, team: state.team
     }));
   } catch (e) { toast('浏览器不允许本地保存，本次修改不会保留'); }
 }
-const drillOf = (id) => DRILLS.find((d) => d.id === id);
+const allDrills = () => DRILLS.concat(state.cust || []);
+const drillOf = (id) => allDrills().find((d) => d.id === id);
 const ageOf = (id) => AGES.find((a) => a.id === id) || AGES[1];
 const catOf = (id) => CATS.find((c) => c.id === id);
 const phaseOf = (id) => PHASES.find((p) => p.id === id);
@@ -728,8 +791,9 @@ function badgeState() {
 
 /* 教案生成 */
 function pickPool(band, phase, theme) {
-  const pool = DRILLS.filter((d) => d.ages.indexOf(band) >= 0 && d.phases.indexOf(phase) >= 0);
-  if (!pool.length) return DRILLS.filter((d) => d.ages.indexOf(band) >= 0);
+  const src = allDrills();
+  const pool = src.filter((d) => d.ages.indexOf(band) >= 0 && d.phases.indexOf(phase) >= 0);
+  if (!pool.length) return src.filter((d) => d.ages.indexOf(band) >= 0);
   if (theme === 'all') return pool;
   const preferred = pool.filter((d) => d.cat === theme);
   return preferred.length >= 2 ? preferred.concat(pool.filter((d) => d.cat !== theme)) : pool;
@@ -770,7 +834,7 @@ function genPlan(band, minutes, theme) {
       chosen.push(pool[i]); used.push(pool[i].id); pool.splice(i, 1); n--;
     }
     if (!chosen.length) {
-      const any = DRILLS.filter((d) => d.ages.indexOf(band) >= 0);
+      const any = allDrills().filter((d) => d.ages.indexOf(band) >= 0);
       chosen.push(any[Math.floor(Math.random() * any.length)]);
     }
     const base = Math.floor(dur / chosen.length);
@@ -784,6 +848,22 @@ function genPlan(band, minutes, theme) {
     band: band, minutes: minutes, theme: theme, segs: segs,
     createdAt: TODAY
   };
+}
+
+/* 趣味课：在正常配比上，保证「趣味挑战」段优先用纯游戏类动作 */
+function genFunPlan(band, minutes) {
+  const p = genPlan(band, minutes, 'game');
+  const pool = allDrills().filter((d) => d.cat === 'game' && d.ages.indexOf(band) >= 0 && d.phases.indexOf('game') >= 0);
+  const used = p.segs.map((s) => s.drillId);
+  p.segs.filter((s) => s.phase === 'game').forEach((s, i) => {
+    if (i >= 2 || !pool.length) return;
+    const cand = pool.filter((d) => used.indexOf(d.id) < 0);
+    if (!cand.length) return;
+    const nd = cand[Math.floor(Math.random() * cand.length)];
+    s.drillId = nd.id; used.push(nd.id);
+  });
+  p.title = ageOf(band).t + ' · 趣味训练课';
+  return p;
 }
 
 /* =====================================================================
@@ -845,7 +925,7 @@ RENDER.home = function () {
     '<h1 class="hero-t">把一节课备到<br><em>能直接开练</em></h1>' +
     '<p class="hero-sub">选年龄、选时长、选主题，自动排出热身到放松的五段课；到球场用手机打开，直接照着带。</p>' +
     '<div class="hero-foot">' + heroCta +
-      '<button class="btn btn-g" data-act="go" data-arg="library">看训练库 ' + DRILLS.length + ' 个动作</button>' +
+      '<button class="btn btn-g" data-act="go" data-arg="library">看训练库 ' + allDrills().length + ' 个动作</button>' +
     '</div>' +
     '<div class="row" style="gap:8px;flex-wrap:wrap">' +
       '<span class="magnet"><i></i>' + state.players.length + ' 名球员</span>' +
@@ -937,7 +1017,8 @@ RENDER.build = function () {
       '<div class="field"><label>主题</label><div class="row" style="flex-wrap:wrap;gap:8px">' +
         THEMES.map((t) => '<button class="btn btn-s ' + (b.theme === t.id ? 'btn-p' : 'btn-g') + '" data-act="set-theme" data-arg="' + t.id + '">' + t.n + '</button>').join('') +
       '</div></div>' +
-      '<div style="margin-top:12px"><button class="btn btn-p btn-block" data-act="gen">生成这节课</button></div>' +
+      '<div style="margin-top:12px"><button class="btn btn-p btn-block" data-act="gen">生成这节课</button>' +
+        '<button class="btn btn-g btn-block" data-act="gen-fun" style="margin-top:8px">一键趣味课（游戏优先）</button></div>' +
       '<div class="note" style="margin-top:10px">' + ageOf(b.band).ball + '。生成后可增删环节、加减分钟、单独换掉某个动作。</div>' +
     '</div>' +
   '</div>' +
@@ -985,7 +1066,7 @@ function segRow(s, i, editable) {
       '<div class="seg-p">' + ph.n + '</div>' +
       '<div class="seg-n">' + esc(d.n) + '</div>' +
       '<div class="seg-d">' + esc(pts) + '</div>' +
-      (editable ? '<div class="row" style="gap:6px;margin-top:8px">' +
+      (editable ? '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">' +
         '<button class="btn btn-g btn-s" data-act="seg-minus" data-arg="' + i + '">−2 分</button>' +
         '<button class="btn btn-g btn-s" data-act="seg-plus" data-arg="' + i + '">+2 分</button>' +
         '<button class="btn btn-g btn-s" data-act="seg-swap" data-arg="' + i + '">换动作</button>' +
@@ -1000,12 +1081,13 @@ function segRow(s, i, editable) {
    视图：训练库
    ===================================================================== */
 RENDER.library = function () {
-  const list = DRILLS.filter((d) =>
+  const all = allDrills();
+  const list = all.filter((d) =>
     (ui.libBand === 'all' || d.ages.indexOf(ui.libBand) >= 0) &&
     (ui.libCat === 'all' || d.cat === ui.libCat));
   return '' +
   '<div class="sec" style="margin-top:0">' +
-    '<div class="sec-h"><h2>训练库</h2><span class="sub">' + list.length + ' / ' + DRILLS.length + ' 个动作</span></div>' +
+    '<div class="sec-h"><h2>训练库</h2><span class="sub">' + list.length + ' / ' + all.length + ' 个动作</span></div>' +
     '<div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:6px">' +
       '<button class="btn btn-s ' + (ui.libBand === 'all' ? 'btn-p' : 'btn-g') + '" data-act="lib-band" data-arg="all">全部年龄</button>' +
       AGES.map((a) => '<button class="btn btn-s ' + (ui.libBand === a.id ? 'btn-p' : 'btn-g') + '" data-act="lib-band" data-arg="' + a.id + '">' + a.n + '</button>').join('') +
@@ -1014,10 +1096,17 @@ RENDER.library = function () {
       '<button class="btn btn-s ' + (ui.libCat === 'all' ? 'btn-p' : 'btn-g') + '" data-act="lib-cat" data-arg="all">全部类别</button>' +
       CATS.map((c) => '<button class="btn btn-s ' + (ui.libCat === c.id ? 'btn-p' : 'btn-g') + '" data-act="lib-cat" data-arg="' + c.id + '">' + c.n + '</button>').join('') +
     '</div>' +
+    '<div class="row between" style="margin-top:12px;gap:8px;flex-wrap:wrap">' +
+      '<div style="font-size:12px;color:var(--muted);min-width:0">自建动作 ' + state.cust.length + ' 个，排课时自动进池</div>' +
+      '<div class="row" style="gap:6px">' +
+        '<button class="btn btn-g btn-s" data-act="drill-import">导入</button>' +
+        '<button class="btn btn-p btn-s" data-act="drill-new">＋ 新增动作</button>' +
+      '</div>' +
+    '</div>' +
     '<div class="list" style="margin-top:12px">' + (list.length ? list.map((d) =>
       '<button class="drill" data-act="drill" data-arg="' + d.id + '">' +
         '<div class="drill-idx num">' + d.min + '</div>' +
-        '<div style="min-width:0"><div class="drill-n">' + esc(d.n) + '</div>' +
+        '<div style="min-width:0"><div class="drill-n">' + esc(d.n) + (d.custom ? ' <span class="tag">自建</span>' : '') + '</div>' +
         '<div class="drill-m"><span>' + catOf(d.cat).n + '</span><span>' + d.players + '</span><span>' + esc(d.space) + '</span></div></div>' +
         '<div class="tag ' + d.ages[0].toLowerCase() + '">' + d.ages.map((a) => ageOf(a).n).join(' / ') + '</div>' +
       '</button>').join('') : '<div class="empty">这个组合下没有动作，换个年龄段试试。</div>') + '</div>' +
@@ -1040,9 +1129,59 @@ function drillSheet(id) {
     '<div class="blk"><h4>进阶 / 降阶</h4><ul><li><b>进阶：</b>' + esc(d.up) + '</li><li><b>降阶：</b>' + esc(d.down) + '</li></ul></div>' +
     '<div class="blk"><h4>趣味化</h4><div class="note">' + esc(d.fun) + '</div></div>' +
     '<div class="blk"><h4>可放在</h4><div class="row" style="gap:6px;flex-wrap:wrap">' + d.phases.map((p) => '<span class="tag">' + phaseOf(p).n + '</span>').join('') + '</div></div>' +
-    '<div style="margin-top:14px"><button class="btn btn-p btn-block" data-act="drill-add" data-arg="' + d.id + '">加入这节课</button></div>'
+    '<div style="margin-top:14px"><button class="btn btn-p btn-block" data-act="drill-add" data-arg="' + d.id + '">加入这节课</button></div>' +
+    (d.custom ? '<div class="row" style="gap:8px;margin-top:8px">' +
+      '<button class="btn btn-g btn-s" data-act="drill-edit" data-arg="' + d.id + '">编辑这个动作</button>' +
+      '<button class="btn btn-g btn-s" data-act="drill-del" data-arg="' + d.id + '">删除</button></div>' : '')
   );
 }
+
+/* 自建动作表单 */
+function drillForm(id) {
+  const d = id ? drillOf(id) : null;
+  const A = d ? d.ages : ['B'];
+  const P = d ? d.phases : ['game'];
+  openSheet(
+    '<form data-act="drill-save">' +
+      '<input type="hidden" name="id" value="' + (d ? esc(d.id) : '') + '">' +
+      '<div class="sheet-h"><div><div class="seg-p">自建动作</div><div class="sheet-t">' + (d ? '编辑动作' : '新增动作') + '</div></div>' +
+        '<button class="close" type="button" data-act="close-sheet" aria-label="关闭">✕</button></div>' +
+      '<div class="field"><label>动作名称</label><input name="name" required maxlength="20" value="' + esc(d ? d.n : '') + '" placeholder="如：抢球大战"></div>' +
+      '<div class="field"><label>适用年龄（可多选）</label><div class="row" style="gap:14px;flex-wrap:wrap">' +
+        AGES.map((a) => '<label class="ck"><input type="checkbox" name="ages" value="' + a.id + '"' + (A.indexOf(a.id) >= 0 ? ' checked' : '') + '>' + a.n + '</label>').join('') +
+      '</div></div>' +
+      '<div class="row" style="gap:8px;flex-wrap:wrap">' +
+        '<div class="field" style="flex:1 1 130px"><label>类别</label><select name="cat">' +
+          CATS.map((c) => '<option value="' + c.id + '"' + ((d ? d.cat === c.id : c.id === 'game') ? ' selected' : '') + '>' + c.n + '</option>').join('') +
+        '</select></div>' +
+        '<div class="field" style="flex:0 1 100px"><label>建议时长</label><input name="min" type="number" min="3" max="30" value="' + (d ? d.min : 10) + '"></div>' +
+      '</div>' +
+      '<div class="field"><label>可放在哪些环节（可多选）</label><div class="row" style="gap:14px;flex-wrap:wrap">' +
+        PHASES.map((p) => '<label class="ck"><input type="checkbox" name="phases" value="' + p.id + '"' + (P.indexOf(p.id) >= 0 ? ' checked' : '') + '>' + p.n + '</label>').join('') +
+      '</div></div>' +
+      '<div class="field"><label>训练目标</label><input name="goal" maxlength="40" value="' + esc(d ? d.goal : '') + '" placeholder="一句话：练什么、为了什么"></div>' +
+      '<div class="field"><label>做法（一行一步）</label><textarea name="steps" rows="4" placeholder="哨响后去中间拿球&#10;拿到球后运球 8 秒内传出&#10;被抢的人立刻去抢别人">' + esc(d ? d.steps.join('\n') : '') + '</textarea></div>' +
+      '<div class="field"><label>教练要点（一行一条，可不填）</label><textarea name="points" rows="3" placeholder="护球放远侧&#10;抬头看空位">' + esc(d ? (d.points || []).join('\n') : '') + '</textarea></div>' +
+      '<div class="field"><label>趣味化（怎么让孩子想玩）</label><input name="fun" maxlength="60" value="' + esc(d ? d.fun : '') + '" placeholder="如：最后两人决赛，全队数秒"></div>' +
+      '<div class="note">保存后自动出现在训练库，也会参与「排一节课」的动作池。只保存在这台设备上。</div>' +
+      '<div style="margin-top:12px"><button class="btn btn-p btn-block" type="submit">' + (d ? '保存修改' : '加到训练库') + '</button></div>' +
+    '</form>'
+  );
+}
+/* 批量导入动作（粘贴 JSON） */
+function drillImport() {
+  openSheet(
+    '<form data-act="drill-import-do">' +
+      '<div class="sheet-h"><div><div class="seg-p">批量导入</div><div class="sheet-t">粘贴动作 JSON</div></div>' +
+        '<button class="close" type="button" data-act="close-sheet" aria-label="关闭">✕</button></div>' +
+      '<div class="field"><label>JSON（一个动作或一组动作，可带 ``` 包裹）</label>' +
+        '<textarea name="json" rows="9" placeholder=\'{"n":"抢球大战","cat":"game","ages":["A","B"],"min":10,"phases":["game"],"goal":"练护球和对抗","steps":["哨响后去中间拿球","8 秒内运球不丢"],"points":["护球放远侧"],"fun":"两人决赛全队数秒"}\'></textarea></div>' +
+      '<div class="note">字段：n 名称、cat 类别（game 趣味游戏 / dribble 球感与运球 / pass 传接球 / shoot 投篮 / foot 脚步与防守 / fit 体能与对抗）、ages 年龄（A＝U6-U8，B＝U9-U11，C＝U12-U15）、min 分钟、phases 环节（warm / tech / game / match / cool）、goal、steps、points、fun。缺省项用默认值补齐，只有「名称 + 做法 + 年龄」是必填。</div>' +
+      '<div style="margin-top:12px"><button class="btn btn-p btn-block" type="submit">导入到训练库</button></div>' +
+    '</form>'
+  );
+}
+
 /* =====================================================================
    视训：执教（计时器）
    ===================================================================== */
@@ -1381,7 +1520,7 @@ RENDER.doc = function () {
     '<p><b>5. 数据。</b>「数据」里看本周时长、出勤率、徽章进度，判断该加量还是该减量。</p>' +
     '</div>' +
 
-    '<div class="sec-h" style="margin-top:22px"><h2>训练内容体系</h2><span class="sub">' + DRILLS.length + ' 个动作</span></div>' +
+    '<div class="sec-h" style="margin-top:22px"><h2>训练内容体系</h2><span class="sub">' + DRILLS.length + ' 个内置动作' + (state.cust.length ? ' + ' + state.cust.length + ' 个自建' : '') + '</span></div>' +
     '<div class="card"><p>按 6–15 岁分成三段，每段动作、球号、篮筐高度都不同：</p>' +
     '<ul>' + AGES.map((a) => '<li><b>' + a.n + '（' + a.t + '）：</b>' + a.ball + '。' + a.tip + '</li>').join('') + '</ul>' +
     '<p style="margin-top:10px">动作分六类：' + CATS.map((c) => c.n).join('、') + '。每个动作都有目标、组织方式、器材、做法步骤、教练要点、进阶/降阶和趣味化玩法，点训练库里的任意一条就能看到全部细节。</p>' +
@@ -1505,7 +1644,7 @@ function handle(act, arg, el, fd) {
     }
     case 'seg-swap': {
       const i = +arg; const seg = state.draft.segs[i];
-      const pool = DRILLS.filter((d) => d.ages.indexOf(state.draft.band) >= 0 && d.phases.indexOf(seg.phase) >= 0 && d.id !== seg.drillId);
+      const pool = allDrills().filter((d) => d.ages.indexOf(state.draft.band) >= 0 && d.phases.indexOf(seg.phase) >= 0 && d.id !== seg.drillId);
       if (!pool.length) { toast('这个环节没有别的动作了'); break; }
       seg.drillId = pool[Math.floor(Math.random() * pool.length)].id;
       render(); toast('已换一个动作'); break;
@@ -1519,6 +1658,87 @@ function handle(act, arg, el, fd) {
       state.draft.minutes += d.min;
       closeSheet(); toast('已加入，去备课页看看'); break;
     }
+    case 'drill-new': drillForm(); break;
+    case 'drill-import': drillImport(); break;
+    case 'drill-import-do': {
+      let raw = String(fd.get('json') || '').trim();
+      raw = raw.replace(/^```[a-zA-Z]*\s*\n/, '').replace(/\n?```$/,'').trim();
+      let data;
+      try { data = JSON.parse(raw); } catch (e) { toast('JSON 解析失败：检查引号和逗号'); break; }
+      const arr = Array.isArray(data) ? data : [data];
+      const ok = [], bad = [];
+      arr.forEach((x) => {
+        if (!x || typeof x !== 'object') { bad.push('不是对象'); return; }
+        const n = String(x.n || x.name || '').trim();
+        const steps = (Array.isArray(x.steps) ? x.steps : String(x.steps || '').split('\n'))
+          .map((s) => String(s).trim()).filter(Boolean);
+        const ags = (Array.isArray(x.ages) ? x.ages : [x.ages])
+          .map((v) => String(v || '').toUpperCase()).filter((v) => AGES.some((a) => a.id === v));
+        const phs = (Array.isArray(x.phases) ? x.phases : [x.phases])
+          .map(String).filter((v) => PHASES.some((p) => p.id === v));
+        if (!n || !steps.length || !ags.length) { bad.push(n || '（缺名称/做法/年龄）'); return; }
+        ok.push({
+          id: 'c' + uid(), n: n,
+          cat: CATS.some((c) => c.id === x.cat) ? x.cat : 'game',
+          ages: ags, min: Math.max(3, Math.min(30, parseInt(x.min, 10) || 10)),
+          players: String(x.players || '全体'), space: String(x.space || '半场'),
+          gear: (Array.isArray(x.gear) && x.gear.length) ? x.gear.map(String) : ['球人手一个'],
+          goal: String(x.goal || n),
+          setup: String(x.setup || '按做法组织，教练站在能看到所有人的位置'),
+          steps: steps,
+          points: (Array.isArray(x.points) ? x.points : String(x.points || '').split('\n'))
+            .map(String).filter(Boolean),
+          up: String(x.up || '孩子练熟后加入对抗和速度'),
+          down: String(x.down || '去掉对抗，只做原地动作'),
+          fun: String(x.fun || '分组计分，赢的一组决定下一个游戏'),
+          phases: phs.length ? phs : ['game'], custom: true
+        });
+      });
+      if (!ok.length) { toast('没读到可用动作：' + (bad.join('、') || '检查名称/做法/年龄')); break; }
+      state.cust = (state.cust || []).concat(ok);
+      save(); closeSheet(); render();
+      toast('已导入 ' + ok.length + ' 个动作' + (bad.length ? '，跳过 ' + bad.length + ' 个' : ''));
+      break;
+    }
+    case 'drill-edit': drillForm(arg); break;
+    case 'drill-del': {
+      const dd = state.cust.find((x) => x.id === arg);
+      if (!dd) break;
+      if (!confirm('删除「' + dd.n + '」？已保存教案里用到它的段落会显示“未找到动作”。')) break;
+      state.cust = state.cust.filter((x) => x.id !== arg);
+      save(); closeSheet(); render(); toast('已删除'); break;
+    }
+    case 'drill-save': {
+      const name = String(fd.get('name') || '').trim();
+      const ags = fd.getAll('ages').map(String);
+      const phs = fd.getAll('phases').map(String);
+      const steps = String(fd.get('steps') || '').split('\n').map((s) => s.trim()).filter(Boolean);
+      if (!name) { toast('先给动作起个名字'); break; }
+      if (!ags.length) { toast('至少选一个适用年龄'); break; }
+      if (!phs.length) { toast('至少选一个环节'); break; }
+      if (!steps.length) { toast('做法至少写一步'); break; }
+      const dev = {
+        id: String(fd.get('id') || '') || ('c' + uid()),
+        n: name, cat: String(fd.get('cat') || 'game'), ages: ags,
+        min: Math.max(3, Math.min(30, parseInt(fd.get('min'), 10) || 10)),
+        players: '全体', space: '半场', gear: ['球人手一个'],
+        goal: String(fd.get('goal') || '').trim() || name,
+        setup: '按做法组织，教练站在能看到所有人的位置',
+        steps: steps,
+        points: String(fd.get('points') || '').split('\n').map((s) => s.trim()).filter(Boolean),
+        up: '孩子练熟后加入对抗和速度', down: '去掉对抗，只做原地动作',
+        fun: String(fd.get('fun') || '').trim() || '分组计分，赢的一组决定下一个游戏',
+        phases: phs, custom: true
+      };
+      const i = state.cust.findIndex((x) => x.id === dev.id);
+      if (i >= 0) state.cust[i] = dev; else state.cust.push(dev);
+      save(); closeSheet(); render();
+      toast(i >= 0 ? '已更新「' + name + '」' : '已加入训练库：' + name);
+      break;
+    }
+    case 'gen-fun':
+      state.draft = genFunPlan(b.band, b.minutes);
+      render(); toast('趣味课生成好了，可再换动作'); break;
     case 'lib-band': ui.libBand = arg; render(); break;
     case 'lib-cat': ui.libCat = arg; render(); break;
     case 'coach-start':
